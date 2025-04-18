@@ -10,14 +10,19 @@ interface AccountMetadata {
   avatarCid: string | null;
 }
 class Post {
+  authorDid: string;
   text: string;
   timestamp: number;
+  timenotstamp: string;
   quotingDid: string | null;
   replyingDid: string | null;
   imagesLinksCid: string[] | null;
   videosLinkCid: string | null;
-  constructor(record : ComAtprotoRepoListRecords.Record) {
+
+  constructor(record: ComAtprotoRepoListRecords.Record, did: string) {
+    this.authorDid = did;
     const post = record.value as AppBskyFeedPost.Record;
+    this.timenotstamp = post.createdAt;
     this.text = post.text;
     this.timestamp = Date.parse(post.createdAt);
     if (post.reply) {
@@ -30,7 +35,9 @@ class Post {
     this.videosLinkCid = null;
     switch (post.embed?.$type) {
       case "app.bsky.embed.images":
-        this.imagesLinksCid = post.embed.images.map ((imageRecord) => imageRecord.image.ref.$link);
+        this.imagesLinksCid = post.embed.images.map((imageRecord) =>
+          imageRecord.image.ref.$link
+        );
         break;
       case "app.bsky.embed.video":
         this.videosLinkCid = post.embed.video.ref.$link;
@@ -42,7 +49,9 @@ class Post {
         this.quotingDid = didFromATuri(post.embed.record.record.uri).repo;
         switch (post.embed.media.$type) {
           case "app.bsky.embed.images":
-            this.imagesLinksCid = post.embed.media.images.map ((imageRecord) => imageRecord.image.ref.$link);
+            this.imagesLinksCid = post.embed.media.images.map((imageRecord) =>
+              imageRecord.image.ref.$link
+            );
             break;
           case "app.bsky.embed.video":
             this.videosLinkCid = post.embed.media.video.ref.$link;
@@ -53,14 +62,14 @@ class Post {
   }
 }
 
-const didFromATuri = (aturi : string) => {
-    const parts = aturi.split('/');
-    return {
-        repo: parts[2],
-        collection: parts[3],
-        rkey: parts[4]
-    };
-}
+const didFromATuri = (aturi: string) => {
+  const parts = aturi.split("/");
+  return {
+    repo: parts[2],
+    collection: parts[3],
+    rkey: parts[4],
+  };
+};
 
 const rpc = new XRPC({
   handler: simpleFetchHandler({
@@ -110,10 +119,27 @@ const fetchPosts = async (did: string) => {
     params: {
       repo: did,
       collection: "app.bsky.feed.post",
-      limit: 5
-    }
+      limit: 5,
+    },
   });
-  return data.records as ComAtprotoRepoListRecords.Record[];
-}
-// console.log((await fetchPosts("did:web:astrra.space")).map((record : any) => new Post(record)))
-console.log(await getAccountMetadata("did:web:astrra.space"));
+  return {
+    records: data.records as ComAtprotoRepoListRecords.Record[],
+    did: did,
+  };
+};
+
+const fetchAllPosts = async () => {
+  const users: AccountMetadata[] = await getAllMetadataFromPds();
+  const postRecords = await Promise.all(
+    users.map(async (metadata: AccountMetadata) =>
+      await fetchPosts(metadata.did)
+    ),
+  );
+  const posts : Post[] = postRecords.flatMap((userFetch) =>
+    userFetch.records.map((record) => new Post(record, userFetch.did))
+  );
+  posts.sort((a, b) => b.timestamp - a.timestamp);
+  return posts;
+};
+
+console.log(await fetchAllPosts());
