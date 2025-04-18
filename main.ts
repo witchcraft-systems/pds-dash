@@ -1,18 +1,65 @@
 import { simpleFetchHandler, XRPC } from "@atcute/client";
 import "@atcute/bluesky/lexicons";
+import { ComAtprotoRepoListRecords } from "@atcute/client/lexicons";
+import { AppBskyFeedPost } from "@atcute/client/lexicons";
+import { AppBskyActorDefs } from "@atcute/client/lexicons";
 
 interface AccountMetadata {
   did: string;
   displayName: string;
   avatarCid: string | null;
 }
-interface Post {
-  text: string,
-  timestamp: number,
-  quoting: string | null,
-  replying: string | null,
-  imagesLinks: string[] | null,
-  videosLinks: string[] | null,
+class Post {
+  text: string;
+  timestamp: number;
+  quotingDid: string | null;
+  replyingDid: string | null;
+  imagesLinksCid: string[] | null;
+  videosLinkCid: string | null;
+  constructor(record : ComAtprotoRepoListRecords.Record) {
+    const post = record.value as AppBskyFeedPost.Record;
+    this.text = post.text;
+    this.timestamp = Date.parse(post.createdAt);
+    if (post.reply) {
+      this.replyingDid = didFromATuri(post.reply.parent.uri).repo;
+    } else {
+      this.replyingDid = null;
+    }
+    this.quotingDid = null;
+    this.imagesLinksCid = null;
+    this.videosLinkCid = null;
+    switch (post.embed?.$type) {
+      case "app.bsky.embed.images":
+        this.imagesLinksCid = post.embed.images.map ((imageRecord) => imageRecord.image.ref.$link);
+        break;
+      case "app.bsky.embed.video":
+        this.videosLinkCid = post.embed.video.ref.$link;
+        break;
+      case "app.bsky.embed.record":
+        this.quotingDid = didFromATuri(post.embed.record.uri).repo;
+        break;
+      case "app.bsky.embed.recordWithMedia":
+        this.quotingDid = didFromATuri(post.embed.record.record.uri).repo;
+        switch (post.embed.media.$type) {
+          case "app.bsky.embed.images":
+            this.imagesLinksCid = post.embed.media.images.map ((imageRecord) => imageRecord.image.ref.$link);
+            break;
+          case "app.bsky.embed.video":
+            this.videosLinkCid = post.embed.media.video.ref.$link;
+            break;
+        }
+        break;
+    }
+  }
+}
+
+const didFromATuri = (aturi : string) => {
+    const parts = aturi.split('/');
+    return {
+        repo: parts[2],
+        collection: parts[3],
+        rkey: parts[4]
+    };
 }
 
 const rpc = new XRPC({
@@ -29,16 +76,17 @@ const getDidsFromPDS = async () => {
 };
 const getAccountMetadata = async (did: `did:${string}:${string}`) => {
   // gonna assume self exists in the app.bsky.actor.profile
-  const { data: { value } } = await rpc.get("com.atproto.repo.getRecord", {
+  const { data } = await rpc.get("com.atproto.repo.getRecord", {
     params: {
       repo: did,
       collection: "app.bsky.actor.profile",
       rkey: "self",
     },
   });
+  const value = data.value as AppBskyActorDefs.ProfileView;
   const account: AccountMetadata = {
     did: did,
-    displayName: value.displayName,
+    displayName: value.displayName || "",
     avatarCid: null,
   };
   if (value.avatar) {
@@ -56,3 +104,16 @@ const getAllMetadataFromPds = async () => {
   );
   return metadata;
 };
+
+const fetchPosts = async (did: string) => {
+  const { data } = await rpc.get("com.atproto.repo.listRecords", {
+    params: {
+      repo: did,
+      collection: "app.bsky.feed.post",
+      limit: 5
+    }
+  });
+  return data.records as ComAtprotoRepoListRecords.Record[];
+}
+// console.log((await fetchPosts("did:web:astrra.space")).map((record : any) => new Post(record)))
+console.log(await getAccountMetadata("did:web:astrra.space"));
