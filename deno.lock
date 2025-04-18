@@ -1,0 +1,67 @@
+{
+  "version": "4",
+  "specifiers": {
+    "jsr:@std/assert@1": "1.0.12",
+    "jsr:@std/internal@^1.0.6": "1.0.6",
+    "npm:@atcute/bluesky@^2.0.2": "2.0.2_@atcute+client@3.0.1",
+    "npm:@atcute/client@^3.0.1": "3.0.1",
+    "npm:@skyware/jetstream@~0.2.2": "0.2.2_@atcute+client@3.0.1",
+    "npm:dotenv@^16.5.0": "16.5.0"
+  },
+  "jsr": {
+    "@std/assert@1.0.12": {
+      "integrity": "08009f0926dda9cbd8bef3a35d3b6a4b964b0ab5c3e140a4e0351fbf34af5b9a",
+      "dependencies": [
+        "jsr:@std/internal"
+      ]
+    },
+    "@std/internal@1.0.6": {
+      "integrity": "9533b128f230f73bd209408bb07a4b12f8d4255ab2a4d22a1fd6d87304aca9a4"
+    }
+  },
+  "npm": {
+    "@atcute/bluesky@1.0.15_@atcute+client@3.0.1": {
+      "integrity": "sha512-+EFiybmKQ97aBAgtaD+cKRJER5AMn3cZMkEwEg/pDdWyzxYJ9m1UgemmLdTgI8VrxPufKqdXS2nl7uO7TY6BPA==",
+      "dependencies": [
+        "@atcute/client"
+      ]
+    },
+    "@atcute/bluesky@2.0.2_@atcute+client@3.0.1": {
+      "integrity": "sha512-xU+9Rp8bzc9AOnWSc11M1urRppDt3BiWR7v2QrLt3Qoysa5jvL8j2p2w4iRT8vLByz8Q+Xgk5Kz4zWVx1zCiug==",
+      "dependencies": [
+        "@atcute/client"
+      ]
+    },
+    "@atcute/client@3.0.1": {
+      "integrity": "sha512-j51SuQYQj5jeKrx1DCXx+Q3fpVvO0JYGnKnJAdDSlesSLjPXjvnx1abC+hkuro58KRHHJvRA6P1MC0pmJsWfcg=="
+    },
+    "@skyware/jetstream@0.2.2_@atcute+client@3.0.1": {
+      "integrity": "sha512-d1MtWPTIFEciSzV8OClXZCJoz0DJ7aupt4EZSwpGAASYG0ZIPmZTt7RVJkoFzQyqRPHAMD7CvEwu0ut3MHX1og==",
+      "dependencies": [
+        "@atcute/bluesky@1.0.15_@atcute+client@3.0.1",
+        "partysocket"
+      ]
+    },
+    "dotenv@16.5.0": {
+      "integrity": "sha512-m/C+AwOAr9/W1UOIZUo232ejMNnJAJtYQjUbHoNTBNTJSvqzzDh7vnrei3o3r3m9blf6ZoDkvcw0VmozNRFJxg=="
+    },
+    "event-target-polyfill@0.0.4": {
+      "integrity": "sha512-Gs6RLjzlLRdT8X9ZipJdIZI/Y6/HhRLyq9RdDlCsnpxr/+Nn6bU2EFGuC94GjxqhM+Nmij2Vcq98yoHrU8uNFQ=="
+    },
+    "partysocket@1.1.3": {
+      "integrity": "sha512-87Jd/nqPoWnVfzHE6Z12WLWTJ+TAgxs0b7i2S163HfQSrVDUK5tW/FC64T5N8L5ss+gqF+EV0BwjZMWggMY3UA==",
+      "dependencies": [
+        "event-target-polyfill"
+      ]
+    }
+  },
+  "workspace": {
+    "dependencies": [
+      "jsr:@std/assert@1",
+      "npm:@atcute/bluesky@^2.0.2",
+      "npm:@atcute/client@^3.0.1",
+      "npm:@skyware/jetstream@~0.2.2",
+      "npm:dotenv@^16.5.0"
+    ]
+  }
+}
