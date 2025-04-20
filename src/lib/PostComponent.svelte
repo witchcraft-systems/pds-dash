@@ -222,14 +222,6 @@
     margin-left: 0px;
     border-right: #8054f0 1px solid;
   }
-  #embedImages {
-    min-width: 500px;
-    max-width: 500px;
-    max-height: 500px;
-    object-fit: contain;
-
-    margin: 0;
-  }
   #carouselContainer {
     position: relative;
     width: 100%;
@@ -280,5 +272,14 @@
     max-width: 500px;
     margin-top: 10px;
     align-self: center;
+  }
+
+  #embedImages {
+    min-width: min(100%, 500px);
+    max-width: min(100%, 500px);
+    max-height: 500px;
+    object-fit: contain;
+
+    margin: 0;
   }
 </style>

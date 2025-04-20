@@ -41,6 +41,8 @@
 </main>
 
 <style>
+  /* desktop style */
+ 
   #Content {
     display: flex;
     /* split the screen in half, left for accounts, right for posts */
@@ -92,5 +94,37 @@
     text-align: center;
     font-size: 2em;
     margin-bottom: 20px;
+  }
+
+    /* mobile style */
+    @media screen and (max-width: 600px) {
+    #Content {
+      flex-direction: column;
+      width: auto;
+      padding-left: 0px;
+      padding-right: 0px;
+      margin-top: 5%;
+    }
+    #Account {
+      width: auto;
+      padding-left: 5%;
+      padding-right: 5%;
+      margin-bottom: 20px;
+      margin-left: 5%;
+      margin-right: 5%;
+      height: auto;
+    }
+    #Feed {
+      width: 95%;
+      margin: 0px;
+      margin-left: 10%;
+      margin-right: 10%;
+      padding: 0px;
+      height: auto;
+    }
+
+    #spacer {
+      height: 0;
+    }
   }
 </style>
