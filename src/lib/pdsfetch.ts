@@ -5,6 +5,7 @@ import type {
   AppBskyFeedPost,
   ComAtprotoRepoListRecords,
 } from "@atcute/client/lexicons";
+import { Config } from "../../config";
 // import { ComAtprotoRepoListRecords.Record } from "@atcute/client/lexicons";
 // import { AppBskyFeedPost } from "@atcute/client/lexicons";
 // import { AppBskyActorDefs } from "@atcute/client/lexicons";
@@ -87,7 +88,7 @@ const didFromATuri = (aturi: string) => {
 
 const rpc = new XRPC({
   handler: simpleFetchHandler({
-    service: "https://pds.witchcraft.systems",
+    service: Config.PDS_URL,
   }),
 });
 
@@ -99,6 +100,7 @@ const getDidsFromPDS = async () => {
 };
 const getAccountMetadata = async (did: `did:${string}:${string}`) => {
   // gonna assume self exists in the app.bsky.actor.profile
+  try {
   const { data } = await rpc.get("com.atproto.repo.getRecord", {
     params: {
       repo: did,
@@ -116,6 +118,15 @@ const getAccountMetadata = async (did: `did:${string}:${string}`) => {
     account.avatarCid = value.avatar.ref["$link"];
   }
   return account;
+  }
+  catch (e) {
+    console.error(`Error fetching metadata for ${did}:`, e);
+    return {
+      did: "error",
+      displayName: "",
+      avatarCid: null,
+    };
+  }
 };
 
 const getAllMetadataFromPds = async () => {
@@ -125,21 +136,31 @@ const getAllMetadataFromPds = async () => {
       return await getAccountMetadata(repo);
     }),
   );
-  return metadata;
+  return metadata.filter(account => account.did !== "error");
 };
 
 const fetchPosts = async (did: string) => {
-  const { data } = await rpc.get("com.atproto.repo.listRecords", {
-    params: {
-      repo: did,
-      collection: "app.bsky.feed.post",
-      limit: 5,
-    },
-  });
-  return {
-    records: data.records as ComAtprotoRepoListRecords.Record[],
-    did: did,
-  };
+  try {
+    const { data } = await rpc.get("com.atproto.repo.listRecords", {
+      params: {
+        repo: did,
+        collection: "app.bsky.feed.post",
+        limit: 5,
+      },
+    });
+    return {
+      records: data.records as ComAtprotoRepoListRecords.Record[],
+      did: did,
+      error: false
+    };
+  } catch (e) {
+    console.error(`Error fetching posts for ${did}:`, e);
+    return {
+      records: [],
+      did: did,
+      error: true
+    };
+  }
 };
 
 const fetchAllPosts = async () => {
@@ -149,7 +170,8 @@ const fetchAllPosts = async () => {
       await fetchPosts(metadata.did)
     ),
   );
-  const posts: Post[] = postRecords.flatMap((userFetch) =>
+  const validPostRecords = postRecords.filter(record => !record.error);
+  const posts: Post[] = validPostRecords.flatMap((userFetch) =>
     userFetch.records.map((record) => {
       const user = users.find((user: AccountMetadata) =>
         user.did == userFetch.did

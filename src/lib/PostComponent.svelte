@@ -13,13 +13,13 @@
         alt="avatar of {post.displayName}"
       />
     {/if}
-    <p>{post.displayName} | {post.timenotstamp}</p>
+    <div id="headerText">{post.displayName} | {post.timenotstamp}</div>
   </div>
   <div id="postContent">
-    <p>{post.text}</p>
     {#if post.replyingDid}
-      <p>Replying to: {post.replyingDid}</p>
-    {/if}
+    <p id="replyingText">replying to: {post.replyingDid}</p>
+  {/if}
+    <p id="postText">{post.text}</p>
     {#if post.imagesCid}
       <div id="imagesContainer">
         {#each post.imagesCid as imageLink}
@@ -42,20 +42,61 @@
 
 <style>
   #postContainer {
-    display: column;
-    text-align: start;
-    border: 2px solid black;
-    padding: 4%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #8054f0;
+    background-color: black;
+    margin-bottom: -1px;
   }
   #postHeader {
-    text-decoration: underline;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+    background-color: #1f1145;
+    padding: 0px 0px;
+    height: fit-content;
+    border-bottom: 1px solid #8054f0;
+    font-weight: bold;
+  }
+  #postContent {
+    display: flex;
+    text-align: start;
+    flex-direction: column;
+    padding: 10px;
+    background-color: #0d0620;
+    color: white;
+  }
+  #replyingText {
+    font-size: 0.7em;
+    color: white;
+    margin: 0;
+    margin-bottom: 10px;
+    padding: 0;
+  }
+  #postText {
+    margin: 0;
+    padding: 0;
+  }
+  #headerText {
+    margin-left: 10px;
+    font-size: 0.9em;
+    text-align: start;
   }
   #avatar {
     width: 50px;
     height: 50px;
-    border-radius: 50%;
+    margin: 0px;
+    margin-left: 0px;
+    border-right: #8054f0 1px solid;
   }
   #embedImages {
+    width: 50%;
+    height: 50%;
+    margin-top: 0px;
+    margin-bottom: -5px;
+  }
+  #embedVideo {
     width: 50%;
     height: 50%;
   }

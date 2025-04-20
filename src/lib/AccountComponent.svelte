@@ -1,23 +1,39 @@
 <script lang="ts">
     import type { AccountMetadata } from "./pdsfetch";
     const { account }: { account: AccountMetadata } = $props();
+    import { Config } from "../../config";
 </script>
 <div id="accountContainer">
         {#if account.avatarCid}
             <img
                 id="avatar"
                 alt="avatar of {account.displayName}"
-                src="https://pds.witchcraft.systems/xrpc/com.atproto.sync.getBlob?did={account.did}&cid={account.avatarCid}"
+                src="{Config.PDS_URL}/xrpc/com.atproto.sync.getBlob?did={account.did}&cid={account.avatarCid}"
             />
         {/if}
-        <p>{account.displayName}</p>
+        <div id="accountName">{account.displayName || account.did}</div>
 </div>
 <style>
     #accountContainer {
-        display: column;
+        display: flex;
         text-align: start;
-        border: 2px solid black;
+        align-items: center;
+        background-color: #0d0620;
         padding: 4%;
+        margin: 10px;
+
+        /* round corners */
+        border-radius: 10px;
+    }
+    #accountName {
+        margin-left: 10px;
+        font-size: 0.9em;
+        
+        /* replace overflow with ellipsis */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 80%;
     }
     #avatar {
         width: 50px;
