@@ -17,8 +17,17 @@
   <div id="postContent">
     <p>{post.text}</p>
     {#if post.replyingUri}
-      <p>Replying to: {post.replyingUri.repo}</p>
-    {/if}    
+      <a
+        href="https://deer.social/profile/{post.replyingUri.repo}/post/{post
+          .replyingUri.rkey}">Replying to {post.replyingUri.repo}</a
+      >
+    {/if}
+    {#if post.quotingUri}
+      <a
+        href="https://deer.social/profile/{post.quotingUri.repo}/post/{post
+          .quotingUri.rkey}">Quoting {post.quotingUri.repo}</a
+      >
+    {/if}
     {#if post.imagesCid}
       <div id="imagesContainer">
         {#each post.imagesCid as imageLink}
