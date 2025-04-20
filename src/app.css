@@ -6,10 +6,27 @@
 ::-webkit-scrollbar {
   width: 0px;
   background: transparent;
+  padding: 0;
+  margin: 0;
 }
-
+::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 0;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 0;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+  border-radius: 0;
+}
+::-webkit-scrollbar-button {
+  background: transparent;
+  border-radius: 0;
+}
 * {
-  scrollbar-width: thin;
+  scrollbar-width: none;
   scrollbar-color: transparent transparent;
   -ms-overflow-style: none; /* IE and Edge */
   -webkit-overflow-scrolling: touch;
@@ -45,8 +62,10 @@ h1 {
 
 #app {
   max-width: 1400px;
-  margin: 0 auto;
-  padding: 2rem;
+  margin: 0;
+  padding: 0;
+  margin-left: auto;
+  margin-right: auto;
   text-align: center;
 }
 

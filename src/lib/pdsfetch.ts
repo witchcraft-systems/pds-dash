@@ -164,7 +164,7 @@ const fetchPosts = async (did: string) => {
       params: {
         repo: did as At.Identifier,
         collection: "app.bsky.feed.post",
-        limit: 5,
+        limit: Config.MAX_POSTS_PER_USER,
       },
     });
     return {

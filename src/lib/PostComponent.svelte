@@ -25,18 +25,17 @@
   </div>
   <div id="postContent">
     {#if post.replyingUri}
-      <a
-        id="replyingText"
-        href="https://deer.social/profile/{post.replyingUri.repo}/post/{post
-          .replyingUri.rkey}">replying to {post.replyingUri.repo}</a
-      >
+    <a
+      id="replyingText"
+      href="{Config.FRONTEND_URL}/profile/{post.replyingUri.repo}/post/{post
+        .replyingUri.rkey}">replying to {post.replyingUri.repo}</a
+    >
     {/if}
-    <p>{post.text}</p>
-
+    <div id="postText">{post.text}</div>
     {#if post.quotingUri}
       <a
         id="quotingText"
-        href="https://deer.social/profile/{post.quotingUri.repo}/post/{post
+        href="{Config.FRONTEND_URL}/profile/{post.quotingUri.repo}/post/{post
           .quotingUri.rkey}">quoting {post.quotingUri.repo}</a
       >
     {/if}
@@ -66,7 +65,8 @@
     flex-direction: column;
     border: 1px solid #8054f0;
     background-color: black;
-    margin-bottom: -1px;
+    margin-bottom: 15px;
+    overflow-wrap: break-word;
   }
   #postHeader {
     display: flex;
@@ -78,6 +78,7 @@
     height: fit-content;
     border-bottom: 1px solid #8054f0;
     font-weight: bold;
+    overflow-wrap: break-word;
   }
   #postContent {
     display: flex;
@@ -86,22 +87,25 @@
     padding: 10px;
     background-color: #0d0620;
     color: white;
+    overflow-wrap: break-word;
   }
   #replyingText {
     font-size: 0.7em;
-    color: white;
     margin: 0;
-    margin-bottom: 10px;
     padding: 0;
+    padding-bottom: 5px;
   }
   #postText {
     margin: 0;
+    margin-bottom: 5px;
     padding: 0;
   }
   #headerText {
     margin-left: 10px;
     font-size: 0.9em;
     text-align: start;
+    overflow-wrap: break-word;
+    overflow: hidden;
   }
   #avatar {
     width: 50px;
