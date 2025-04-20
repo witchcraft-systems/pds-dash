@@ -50,4 +50,8 @@
     height: 50px;
     border-radius: 50%;
   }
+  #embedImages {
+    width: 50%;
+    height: 50%;
+  }
 </style>
