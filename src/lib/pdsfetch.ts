@@ -7,25 +7,33 @@ import type {
   At,
   ComAtprotoRepoListRecords,
 } from "@atcute/client/lexicons";
-import type App from "../App.svelte";
-// import { ComAtprotoRepoListRecords.Record } from "@atcute/client/lexicons";
-// import { AppBskyFeedPost } from "@atcute/client/lexicons";
-// import { AppBskyActorDefs } from "@atcute/client/lexicons";
+import {
+  CompositeDidDocumentResolver,
+  PlcDidDocumentResolver,
+  WebDidDocumentResolver,
+} from "@atcute/identity-resolver";
 
 interface AccountMetadata {
   did: string;
   displayName: string;
+  handle: string;
   avatarCid: string | null;
+}
+interface atUriObject {
+  repo: string;
+  collection: string;
+  rkey: string;
 }
 class Post {
   authorDid: string;
   authorAvatarCid: string | null;
+  authorHandle: string;
   displayName: string;
   text: string;
   timestamp: number;
   timenotstamp: string;
-  quotingDid: string | null;
-  replyingDid: string | null;
+  quotingUri: atUriObject | null;
+  replyingUri: atUriObject | null;
   imagesCid: string[] | null;
   videosLinkCid: string | null;
 
@@ -35,17 +43,18 @@ class Post {
   ) {
     this.authorDid = account.did;
     this.authorAvatarCid = account.avatarCid;
+    this.authorHandle = account.handle;
     this.displayName = account.displayName;
     const post = record.value as AppBskyFeedPost.Record;
     this.timenotstamp = post.createdAt;
     this.text = post.text;
     this.timestamp = Date.parse(post.createdAt);
     if (post.reply) {
-      this.replyingDid = didFromATuri(post.reply.parent.uri).repo;
+      this.replyingUri = processAtUri(post.reply.parent.uri);
     } else {
-      this.replyingDid = null;
+      this.replyingUri = null;
     }
-    this.quotingDid = null;
+    this.quotingUri = null;
     this.imagesCid = null;
     this.videosLinkCid = null;
     switch (post.embed?.$type) {
@@ -58,10 +67,10 @@ class Post {
         this.videosLinkCid = post.embed.video.ref.$link;
         break;
       case "app.bsky.embed.record":
-        this.quotingDid = didFromATuri(post.embed.record.uri).repo;
+        this.quotingUri = processAtUri(post.embed.record.uri);
         break;
       case "app.bsky.embed.recordWithMedia":
-        this.quotingDid = didFromATuri(post.embed.record.record.uri).repo;
+        this.quotingUri = processAtUri(post.embed.record.record.uri);
         switch (post.embed.media.$type) {
           case "app.bsky.embed.images":
             this.imagesCid = post.embed.media.images.map((imageRecord) =>
@@ -79,7 +88,7 @@ class Post {
   }
 }
 
-const didFromATuri = (aturi: string) => {
+const processAtUri = (aturi: string): atUriObject => {
   const parts = aturi.split("/");
   return {
     repo: parts[2],
@@ -110,8 +119,10 @@ const getAccountMetadata = async (did: `did:${string}:${string}`) => {
     },
   });
   const value = data.value as AppBskyActorProfile.Record;
+  const handle = await blueskyHandleFromDid(did);
   const account: AccountMetadata = {
     did: did,
+    handle: handle,
     displayName: value.displayName || "",
     avatarCid: null,
   };
@@ -145,6 +156,39 @@ const fetchPosts = async (did: string) => {
   };
 };
 
+const identityResolve = async (did: At.Did) => {
+  const resolver = new CompositeDidDocumentResolver({
+    methods: {
+      plc: new PlcDidDocumentResolver(),
+      web: new WebDidDocumentResolver(),
+    },
+  });
+
+  if (did.startsWith("did:plc:") || did.startsWith("did:web:")) {
+    const doc = await resolver.resolve(
+      did as `did:plc:${string}` | `did:web:${string}`,
+    );
+    return doc;
+  } else {
+    throw new Error(`Unsupported DID type: ${did}`);
+  }
+};
+
+const blueskyHandleFromDid = async (did: At.Did) => {
+  const doc = await identityResolve(did);
+  if (doc.alsoKnownAs) {
+    const handleAtUri = doc.alsoKnownAs.find((url) => url.startsWith("at://"));
+    const handle = handleAtUri?.split("/")[2];
+    if (!handle) {
+      return "Handle not found";
+    } else {
+      return handle;
+    }
+  } else {
+    return "Handle not found";
+  }
+};
+
 const fetchAllPosts = async () => {
   const users: AccountMetadata[] = await getAllMetadataFromPds();
   const postRecords = await Promise.all(
@@ -167,5 +211,11 @@ const fetchAllPosts = async () => {
   return posts;
 };
 
+const testApiCall = async () => {
+  const { data } = await rpc.get("com.atproto.sync.listRepos", {
+    params: {},
+  });
+  console.log(data);
+};
 export { fetchAllPosts, getAllMetadataFromPds, Post };
 export type { AccountMetadata };

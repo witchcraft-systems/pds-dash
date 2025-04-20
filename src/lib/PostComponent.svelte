@@ -12,12 +12,12 @@
         src="https://pds.witchcraft.systems/xrpc/com.atproto.sync.getBlob?did={post.authorDid}&cid={post.authorAvatarCid}"
       />
     {/if}
-    <p>{post.displayName} | {post.timenotstamp}</p>
+    <p>{post.displayName} | {post.authorHandle} | {post.timenotstamp}</p>
   </div>
   <div id="postContent">
     <p>{post.text}</p>
-    {#if post.replyingDid}
-      <p>Replying to: {post.replyingDid}</p>
+    {#if post.replyingUri}
+      <p>Replying to: {post.replyingUri.repo}</p>
     {/if}    
     {#if post.imagesCid}
       <div id="imagesContainer">
