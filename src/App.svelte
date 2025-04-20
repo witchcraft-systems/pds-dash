@@ -2,6 +2,7 @@
   import PostComponent from "./lib/PostComponent.svelte";
   import AccountComponent from "./lib/AccountComponent.svelte";
   import { fetchAllPosts, Post, getAllMetadataFromPds } from "./lib/pdsfetch";
+  import { Config } from "../config";
   const postsPromise = fetchAllPosts();
   const accountsPromise = getAllMetadataFromPds();
 </script>
@@ -19,6 +20,7 @@
         <AccountComponent account={accountObject} />
       {/each}
       </div>
+      <p>{@html Config.FOOTER_TEXT}</p>
     </div>
   {:catch error}
     <p>Error: {error.message}</p>    
@@ -74,6 +76,7 @@
     background-color: #0d0620;
     height: 80vh;
     padding: 20px;
+    margin-left: 20px;
   }
   #accountsList {
     display: flex;

@@ -32,6 +32,7 @@ class Post {
   authorDid: string;
   authorAvatarCid: string | null;
   postCid: string;
+  recordName: string;
   authorHandle: string;
   displayName: string;
   text: string;
@@ -47,6 +48,7 @@ class Post {
     account: AccountMetadata,
   ) {
     this.postCid = record.cid;
+    this.recordName = record.uri.split("/").slice(-1)[0];
     this.authorDid = account.did;
     this.authorAvatarCid = account.avatarCid;
     this.authorHandle = account.handle;
