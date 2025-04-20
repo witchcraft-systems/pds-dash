@@ -31,6 +31,7 @@ interface atUriObject {
 class Post {
   authorDid: string;
   authorAvatarCid: string | null;
+  postCid: string;
   authorHandle: string;
   displayName: string;
   text: string;
@@ -45,6 +46,7 @@ class Post {
     record: ComAtprotoRepoListRecords.Record,
     account: AccountMetadata,
   ) {
+    this.postCid = record.cid;
     this.authorDid = account.did;
     this.authorAvatarCid = account.avatarCid;
     this.authorHandle = account.handle;

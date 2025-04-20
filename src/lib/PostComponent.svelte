@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Post } from "./pdsfetch";
-  import { Config } from "../../config"
+  import { Config } from "../../config";
   let { post }: { post: Post } = $props();
 </script>
 
@@ -13,10 +13,17 @@
         alt="avatar of {post.displayName}"
       />
     {/if}
-    <div id="headerText">{post.displayName} | {post.authorHandle} | {post.timenotstamp}</div>
+    <div id="headerText">
+      <a href="{Config.FRONTEND_URL}/profile/{post.authorDid}"
+        >{post.displayName} ( {post.authorHandle} )</a
+      >
+      |
+      <a href="{Config.FRONTEND_URL}/profile/{post.authorDid}/post/{post.cid}"
+        >{post.timenotstamp}</a
+      >
+    </div>
   </div>
   <div id="postContent">
-    <p>{post.text}</p>
     {#if post.replyingUri}
       <a
         id="replyingText"
@@ -24,6 +31,8 @@
           .replyingUri.rkey}">replying to {post.replyingUri.repo}</a
       >
     {/if}
+    <p>{post.text}</p>
+
     {#if post.quotingUri}
       <a
         id="quotingText"

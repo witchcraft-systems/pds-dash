@@ -3,7 +3,9 @@
     const { account }: { account: AccountMetadata } = $props();
     import { Config } from "../../config";
 </script>
-<div id="accountContainer">
+
+<a id="link" href="{Config.FRONTEND_URL}/profile/{account.did}">
+    <div id="accountContainer">
         {#if account.avatarCid}
             <img
                 id="avatar"
@@ -11,8 +13,12 @@
                 src="{Config.PDS_URL}/xrpc/com.atproto.sync.getBlob?did={account.did}&cid={account.avatarCid}"
             />
         {/if}
-        <div id="accountName">{account.displayName || account.did}</div>
-</div>
+        <div id="accountName">
+            {account.displayName || account.handle || account.did}
+        </div>
+    </div>
+</a>
+
 <style>
     #accountContainer {
         display: flex;
@@ -28,7 +34,7 @@
     #accountName {
         margin-left: 10px;
         font-size: 0.9em;
-        
+
         /* replace overflow with ellipsis */
         overflow: hidden;
         text-overflow: ellipsis;
