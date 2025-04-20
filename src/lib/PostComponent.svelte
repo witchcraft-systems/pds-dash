@@ -8,6 +8,7 @@
     {#if post.authorAvatarCid}
       <img
         id="avatar"
+        alt="avatar of {post.displayName}"
         src="https://pds.witchcraft.systems/xrpc/com.atproto.sync.getBlob?did={post.authorDid}&cid={post.authorAvatarCid}"
       />
     {/if}
@@ -18,13 +19,16 @@
     {#if post.replyingDid}
       <p>Replying to: {post.replyingDid}</p>
     {/if}
-    {#if post.imagesLinksCid}
-      {#each post.imagesLinksCid as imageLink}
-        <img
-          id="embedImages"
-          src="https://pds.witchcraft.systems/xrpc/com.atproto.sync.getBlob?did={post.authorDid}&cid={imageLink}"
-        />
-      {/each}
+    {#if post.imagesCid}
+      <div id="imagesContainer">
+        {#each post.imagesCid as imageLink}
+          <img
+            id="embedImages"
+            alt="Post Image"
+            src="https://pds.witchcraft.systems/xrpc/com.atproto.sync.getBlob?did={post.authorDid}&cid={imageLink}"
+          />
+        {/each}
+      </div>
     {/if}
     {#if post.videosLinkCid}
       <video

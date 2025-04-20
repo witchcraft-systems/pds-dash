@@ -1,5 +1,10 @@
 import { simpleFetchHandler, XRPC } from "@atcute/client";
 import "@atcute/bluesky/lexicons";
+import type {
+  AppBskyActorDefs,
+  AppBskyFeedPost,
+  ComAtprotoRepoListRecords,
+} from "@atcute/client/lexicons";
 // import { ComAtprotoRepoListRecords.Record } from "@atcute/client/lexicons";
 // import { AppBskyFeedPost } from "@atcute/client/lexicons";
 // import { AppBskyActorDefs } from "@atcute/client/lexicons";
@@ -12,16 +17,19 @@ interface AccountMetadata {
 class Post {
   authorDid: string;
   authorAvatarCid: string | null;
-  displayName : string;
+  displayName: string;
   text: string;
   timestamp: number;
   timenotstamp: string;
   quotingDid: string | null;
   replyingDid: string | null;
-  imagesLinksCid: string[] | null;
+  imagesCid: string[] | null;
   videosLinkCid: string | null;
 
-  constructor(record: ComAtprotoRepoListRecords.Record, account : AccountMetadata) {
+  constructor(
+    record: ComAtprotoRepoListRecords.Record,
+    account: AccountMetadata,
+  ) {
     this.authorDid = account.did;
     this.authorAvatarCid = account.avatarCid;
     this.displayName = account.displayName;
@@ -35,11 +43,11 @@ class Post {
       this.replyingDid = null;
     }
     this.quotingDid = null;
-    this.imagesLinksCid = null;
+    this.imagesCid = null;
     this.videosLinkCid = null;
     switch (post.embed?.$type) {
       case "app.bsky.embed.images":
-        this.imagesLinksCid = post.embed.images.map((imageRecord) =>
+        this.imagesCid = post.embed.images.map((imageRecord: any) =>
           imageRecord.image.ref.$link
         );
         break;
@@ -53,7 +61,7 @@ class Post {
         this.quotingDid = didFromATuri(post.embed.record.record.uri).repo;
         switch (post.embed.media.$type) {
           case "app.bsky.embed.images":
-            this.imagesLinksCid = post.embed.media.images.map((imageRecord) =>
+            this.imagesCid = post.embed.media.images.map((imageRecord) =>
               imageRecord.image.ref.$link
             );
 
@@ -141,11 +149,20 @@ const fetchAllPosts = async () => {
       await fetchPosts(metadata.did)
     ),
   );
-  const posts : Post[] = postRecords.flatMap((userFetch) =>
-    userFetch.records.map((record) => new Post(record, users.find((user : AccountMetadata) => user.did == userFetch.did)))
+  const posts: Post[] = postRecords.flatMap((userFetch) =>
+    userFetch.records.map((record) => {
+      const user = users.find((user: AccountMetadata) =>
+        user.did == userFetch.did
+      );
+      if (!user) {
+        throw new Error(`User with DID ${userFetch.did} not found`);
+      }
+      return new Post(record, user);
+    })
   );
   posts.sort((a, b) => b.timestamp - a.timestamp);
   return posts;
 };
 
-export { fetchAllPosts, Post };
+export { fetchAllPosts, getAllMetadataFromPds, Post };
+export type { AccountMetadata };
