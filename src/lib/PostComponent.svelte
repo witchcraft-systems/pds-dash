@@ -18,7 +18,7 @@
     <p>{post.text}</p>
     {#if post.replyingDid}
       <p>Replying to: {post.replyingDid}</p>
-    {/if}
+    {/if}    
     {#if post.imagesCid}
       <div id="imagesContainer">
         {#each post.imagesCid as imageLink}

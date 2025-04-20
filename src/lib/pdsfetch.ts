@@ -2,9 +2,12 @@ import { simpleFetchHandler, XRPC } from "@atcute/client";
 import "@atcute/bluesky/lexicons";
 import type {
   AppBskyActorDefs,
+  AppBskyActorProfile,
   AppBskyFeedPost,
+  At,
   ComAtprotoRepoListRecords,
 } from "@atcute/client/lexicons";
+import type App from "../App.svelte";
 // import { ComAtprotoRepoListRecords.Record } from "@atcute/client/lexicons";
 // import { AppBskyFeedPost } from "@atcute/client/lexicons";
 // import { AppBskyActorDefs } from "@atcute/client/lexicons";
@@ -106,7 +109,7 @@ const getAccountMetadata = async (did: `did:${string}:${string}`) => {
       rkey: "self",
     },
   });
-  const value = data.value as AppBskyActorDefs.ProfileView;
+  const value = data.value as AppBskyActorProfile.Record;
   const account: AccountMetadata = {
     did: did,
     displayName: value.displayName || "",
@@ -131,7 +134,7 @@ const getAllMetadataFromPds = async () => {
 const fetchPosts = async (did: string) => {
   const { data } = await rpc.get("com.atproto.repo.listRecords", {
     params: {
-      repo: did,
+      repo: did as At.Identifier,
       collection: "app.bsky.feed.post",
       limit: 5,
     },
