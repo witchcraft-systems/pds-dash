@@ -13,13 +13,24 @@
         alt="avatar of {post.displayName}"
       />
     {/if}
-    <div id="headerText">{post.displayName} | {post.timenotstamp}</div>
+    <div id="headerText">{post.displayName} | {post.authorHandle} | {post.timenotstamp}</div>
   </div>
   <div id="postContent">
-    {#if post.replyingDid}
-    <p id="replyingText">replying to: {post.replyingDid}</p>
-  {/if}
-    <p id="postText">{post.text}</p>
+    <p>{post.text}</p>
+    {#if post.replyingUri}
+      <a
+        id="replyingText"
+        href="https://deer.social/profile/{post.replyingUri.repo}/post/{post
+          .replyingUri.rkey}">replying to {post.replyingUri.repo}</a
+      >
+    {/if}
+    {#if post.quotingUri}
+      <a
+        id="quotingText"
+        href="https://deer.social/profile/{post.quotingUri.repo}/post/{post
+          .quotingUri.rkey}">quoting {post.quotingUri.repo}</a
+      >
+    {/if}
     {#if post.imagesCid}
       <div id="imagesContainer">
         {#each post.imagesCid as imageLink}
