@@ -1,8 +1,8 @@
 import { simpleFetchHandler, XRPC } from "@atcute/client";
 import "@atcute/bluesky/lexicons";
-import { ComAtprotoRepoListRecords } from "@atcute/client/lexicons";
-import { AppBskyFeedPost } from "@atcute/client/lexicons";
-import { AppBskyActorDefs } from "@atcute/client/lexicons";
+// import { ComAtprotoRepoListRecords } from "@atcute/client/lexicons";
+// import { AppBskyFeedPost } from "@atcute/client/lexicons";
+// import { AppBskyActorDefs } from "@atcute/client/lexicons";
 
 interface AccountMetadata {
   did: string;
@@ -11,16 +11,20 @@ interface AccountMetadata {
 }
 class Post {
   authorDid: string;
+  displayName : string;
   text: string;
   timestamp: number;
   timenotstamp: string;
   quotingDid: string | null;
   replyingDid: string | null;
   imagesLinksCid: string[] | null;
+  imagesAltText: string[] | null;
   videosLinkCid: string | null;
+  videosLinksUrls: string[] | null;
 
-  constructor(record: ComAtprotoRepoListRecords.Record, did: string) {
-    this.authorDid = did;
+  constructor(record: ComAtprotoRepoListRecords.Record, account : AccountMetadata) {
+    this.authorDid = account.did;
+    this.displayName = account.displayName;
     const post = record.value as AppBskyFeedPost.Record;
     this.timenotstamp = post.createdAt;
     this.text = post.text;
@@ -38,6 +42,7 @@ class Post {
         this.imagesLinksCid = post.embed.images.map((imageRecord) =>
           imageRecord.image.ref.$link
         );
+        this.imagesAltText = post.embed.images.map((imageRecord) => imageRecord.alt || "no alt text :(")
         break;
       case "app.bsky.embed.video":
         this.videosLinkCid = post.embed.video.ref.$link;
@@ -52,9 +57,12 @@ class Post {
             this.imagesLinksCid = post.embed.media.images.map((imageRecord) =>
               imageRecord.image.ref.$link
             );
+            this.imagesAltText = post.embed.images.map((imageRecord) => imageRecord.alt || "no alt text :(")
+
             break;
           case "app.bsky.embed.video":
             this.videosLinkCid = post.embed.media.video.ref.$link;
+            
             break;
         }
         break;
@@ -73,7 +81,7 @@ const didFromATuri = (aturi: string) => {
 
 const rpc = new XRPC({
   handler: simpleFetchHandler({
-    service: Deno.env.get("PDS_URL") || "https://pds.witchcraft.systems",
+    service: "https://pds.witchcraft.systems",
   }),
 });
 
@@ -136,7 +144,7 @@ const fetchAllPosts = async () => {
     ),
   );
   const posts : Post[] = postRecords.flatMap((userFetch) =>
-    userFetch.records.map((record) => new Post(record, userFetch.did))
+    userFetch.records.map((record) => new Post(record, users.find((user : AccountMetadata) => user.did == userFetch.did)))
   );
   posts.sort((a, b) => b.timestamp - a.timestamp);
   return posts;
