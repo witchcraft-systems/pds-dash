@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - astra/ci
 
 jobs:
   deploy:
