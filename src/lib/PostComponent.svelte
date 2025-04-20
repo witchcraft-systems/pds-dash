@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Post } from "./pdsfetch";
+  import { Config } from "../../config"
   let { post }: { post: Post } = $props();
 </script>
 
@@ -8,8 +9,8 @@
     {#if post.authorAvatarCid}
       <img
         id="avatar"
+        src="{Config.PDS_URL}/xrpc/com.atproto.sync.getBlob?did={post.authorDid}&cid={post.authorAvatarCid}"
         alt="avatar of {post.displayName}"
-        src="https://pds.witchcraft.systems/xrpc/com.atproto.sync.getBlob?did={post.authorDid}&cid={post.authorAvatarCid}"
       />
     {/if}
     <p>{post.displayName} | {post.timenotstamp}</p>
@@ -25,7 +26,7 @@
           <img
             id="embedImages"
             alt="Post Image"
-            src="https://pds.witchcraft.systems/xrpc/com.atproto.sync.getBlob?did={post.authorDid}&cid={imageLink}"
+            src="{Config.PDS_URL}/xrpc/com.atproto.sync.getBlob?did={post.authorDid}&cid={imageLink}"
           />
         {/each}
       </div>
@@ -33,7 +34,7 @@
     {#if post.videosLinkCid}
       <video
         id="embedVideo"
-        src="https://pds.witchcraft.systems/xrpc/com.atproto.sync.getBlob?did={post.authorDid}&cid={post.videosLinkCid}"
+        src="{Config.PDS_URL}/xrpc/com.atproto.sync.getBlob?did={post.authorDid}&cid={post.videosLinkCid}"
       />
     {/if}
   </div>
