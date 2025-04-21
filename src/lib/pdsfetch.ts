@@ -48,7 +48,7 @@ class Post {
     account: AccountMetadata,
   ) {
     this.postCid = record.cid;
-    this.recordName = record.uri.split("/").slice(-1)[0];
+    this.recordName = processAtUri(record.uri).rkey;
     this.authorDid = account.did;
     this.authorAvatarCid = account.avatarCid;
     this.authorHandle = account.handle;
