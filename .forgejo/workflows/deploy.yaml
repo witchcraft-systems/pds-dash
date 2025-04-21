@@ -1,0 +1,58 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - astra/ci
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Setup Deno
+        uses: https://github.com/denoland/setup-deno@v2
+
+      - name: Install dependencies
+        run: deno install
+
+      - name: Build project
+        run: deno task build
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          cat > ~/.ssh/config << EOF
+          Host deploy
+            HostName ${{ vars.SERVER_HOST }}
+            User ${{ vars.SERVER_USER }}
+            IdentityFile ~/.ssh/id_ed25519
+            StrictHostKeyChecking accept-new
+            BatchMode yes
+            PasswordAuthentication no
+            PubkeyAuthentication yes
+          EOF
+          chmod 600 ~/.ssh/config
+          ssh-keyscan -H ${{ vars.SERVER_HOST }} >> ~/.ssh/known_hosts
+          echo "Deploying to ${{ vars.SERVER_HOST }} as ${{ vars.SERVER_USER }} to /var/www/pds/${{ github.ref_name }}"
+
+      - name: Debug SSH Connection
+        run: ssh -v deploy echo "SSH Connection Successful"
+
+      - name: Create folder if not exists
+        run: ssh deploy "mkdir -p /var/www/pds/${{ github.ref_name }}"
+
+      - name: Deploy via SCP
+        run: scp -r ./dist/* deploy:/var/www/pds/${{ github.ref_name }}
