@@ -111,13 +111,13 @@ const rpc = new XRPC({
   }),
 });
 
-const getDidsFromPDS = async () => {
+const getDidsFromPDS = async () : Promise<At.Did[]> => {
   const { data } = await rpc.get("com.atproto.sync.listRepos", {
     params: {},
   });
-  return data.repos.map((repo: any) => (repo.did));
+  return data.repos.map((repo: any) => (repo.did)) as At.Did[];
 };
-const getAccountMetadata = async (did: `did:${string}:${string}`) => {
+const getAccountMetadata = async (did: `did:${string}:${string}`) : Promise<AccountMetadata> => {
   // gonna assume self exists in the app.bsky.actor.profile
   try {
   const { data } = await rpc.get("com.atproto.repo.getRecord", {
@@ -146,11 +146,12 @@ const getAccountMetadata = async (did: `did:${string}:${string}`) => {
       did: "error",
       displayName: "",
       avatarCid: null,
+      handle: "error",
     };
   }
 };
 
-const getAllMetadataFromPds = async () => {
+const getAllMetadataFromPds = async () : Promise<AccountMetadata[]> => {
   const dids = await getDidsFromPDS();
   const metadata = await Promise.all(
     dids.map(async (repo: `did:${string}:${string}`) => {
@@ -238,13 +239,6 @@ const fetchAllPosts = async () => {
   );
   posts.sort((a, b) => b.timestamp - a.timestamp);
   return posts;
-};
-
-const testApiCall = async () => {
-  const { data } = await rpc.get("com.atproto.sync.listRepos", {
-    params: {},
-  });
-  console.log(data);
 };
 export { fetchAllPosts, getAllMetadataFromPds, Post };
 export type { AccountMetadata };
