@@ -12,7 +12,8 @@
   "dependencies": {
     "@atcute/bluesky": "^2.0.2",
     "@atcute/client": "^3.0.1",
-    "@atcute/identity-resolver": "^0.1.2"
+    "@atcute/identity-resolver": "^0.1.2",
+    "moment": "^2.30.1"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^5.0.3",

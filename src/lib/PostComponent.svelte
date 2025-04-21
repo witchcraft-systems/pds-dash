@@ -2,6 +2,7 @@
   import { Post } from "./pdsfetch";
   import { Config } from "../../config";
   import { onMount } from "svelte";
+  import moment from "moment";
 
   let { post }: { post: Post } = $props();
 
@@ -76,7 +77,9 @@
         <a
           id="postLink"
           href="{Config.FRONTEND_URL}/profile/{post.authorDid}/post/{post.recordName}"
-          >{post.timenotstamp}</a
+          >{moment(post.timenotstamp).isBefore(moment().subtract(1, 'month'))
+            ? moment(post.timenotstamp).format('MMM D, YYYY')
+            : moment(post.timenotstamp).fromNow()}</a
         >
       </p>
     </div>
@@ -131,6 +134,7 @@
       </div>
     {/if}
     {#if post.videosLinkCid}
+      <!-- svelte-ignore a11y_media_has_caption -->
       <video
         id="embedVideo"
         src="{Config.PDS_URL}/xrpc/com.atproto.sync.getBlob?did={post.authorDid}&cid={post.videosLinkCid}"
