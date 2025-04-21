@@ -24,10 +24,10 @@
     display: flex;
     text-align: start;
     align-items: center;
-    background-color: #12082b;
+    background-color: var(--background-color);
     padding: 0px;
     margin-bottom: 15px;
-    border: 1px solid #8054f0;
+    border: 1px solid var(--border-color);
   }
   #accountName {
     margin-left: 10px;
@@ -43,6 +43,6 @@
     width: 50px;
     height: 50px;
     margin: 0px;
-    border-right: #8054f0 1px solid;
+    border-right: var(--border-color) 1px solid;
   }
 </style>
