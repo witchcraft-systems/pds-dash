@@ -40,7 +40,7 @@ we use our own CI/CD workflow at [`.forgejo/workflows/deploy.yaml`](.forgejo/wor
 
 ## configuring
 
-`config.ts` is the main configuration file, you can find more information in the file itself.
+[`config.ts`](config.ts) is the main configuration file, you can find more information in the file itself.
 
 ## theming
 
@@ -48,12 +48,12 @@ currently the only way to theme the app is to edit css in the components directl
 
 relevant files:
 
-- `src/App.svelte`
-- `src/app.css`
-- `src/lib/AccountComponent.svelte`
-- `src/lib/PostComponent.svelte`
+- [`src/App.svelte`](src/App.svelte)
+- [`src/app.css`](src/app.css)
+- [`src/lib/AccountComponent.svelte`](src/lib/AccountComponent.svelte)
+- [`src/lib/PostComponent.svelte`](src/lib/PostComponent.svelte)
 
-the favicon is located at `public/favicon.png`
+the favicon is located at [`public/favicon.ico`](public/favicon.ico)
 
 ## License
 
