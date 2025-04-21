@@ -1,5 +1,5 @@
 @font-face {
-  font-family: 'ProggyClean';
+  font-family: "ProggyClean";
   src: url(https://witchcraft.systems/ProggyCleanNerdFont-Regular.ttf);
 }
 
@@ -62,7 +62,7 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background-color: var(--background-color);
-  font-family: 'ProggyClean', monospace;
+  font-family: "ProggyClean", monospace;
   font-size: 24px;
   color: var(--text-color);
   border-color: var(--border-color);

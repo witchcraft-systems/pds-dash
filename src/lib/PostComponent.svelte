@@ -145,7 +145,6 @@
 </div>
 
 <style>
-
   a:hover {
     text-decoration: underline;
   }
@@ -197,6 +196,7 @@
     background-color: var(--content-background-color);
     color: var(--text-color);
     overflow-wrap: break-word;
+    white-space: pre-line;
   }
   #replyingText {
     font-size: 0.7em;

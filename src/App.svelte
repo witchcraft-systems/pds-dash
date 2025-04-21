@@ -9,39 +9,38 @@
 
 <main>
   <div id="Content">
-  {#await accountsPromise}
-    <p>Loading...</p>
-  {:then accountsData}
-    <div id="Account">
-      <h1 id="Header">ATProto PDS</h1>
-      <p>Home to {accountsData.length} accounts</p>
-      <div id="accountsList">
-      {#each accountsData as accountObject}
-        <AccountComponent account={accountObject} />
-      {/each}
+    {#await accountsPromise}
+      <p>Loading...</p>
+    {:then accountsData}
+      <div id="Account">
+        <h1 id="Header">ATProto PDS</h1>
+        <p>Home to {accountsData.length} accounts</p>
+        <div id="accountsList">
+          {#each accountsData as accountObject}
+            <AccountComponent account={accountObject} />
+          {/each}
+        </div>
+        <p>{@html Config.FOOTER_TEXT}</p>
       </div>
-      <p>{@html Config.FOOTER_TEXT}</p>
-    </div>
-  {:catch error}
-    <p>Error: {error.message}</p>    
-  {/await}
+    {:catch error}
+      <p>Error: {error.message}</p>
+    {/await}
 
-  {#await postsPromise}
-    <p>Loading...</p>
-  {:then postsData}
-    <div id="Feed">
-      <div id="spacer"></div>
-      {#each postsData as postObject}
-        <PostComponent post={postObject as Post} />
-      {/each}
-      <div id="spacer"></div>
-    </div>
-  {/await}
+    {#await postsPromise}
+      <p>Loading...</p>
+    {:then postsData}
+      <div id="Feed">
+        <div id="spacer"></div>
+        {#each postsData as postObject}
+          <PostComponent post={postObject as Post} />
+        {/each}
+        <div id="spacer"></div>
+      </div>
+    {/await}
   </div>
 </main>
 
 <style>
-
   /* desktop style */
 
   #Content {
@@ -74,7 +73,7 @@
   #Account {
     width: 35%;
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
     border: 1px solid var(--border-color);
     background-color: var(--content-background-color);
     height: 80vh;

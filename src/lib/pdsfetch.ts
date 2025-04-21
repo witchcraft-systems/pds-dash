@@ -45,7 +45,7 @@ class Post {
 
   constructor(
     record: ComAtprotoRepoListRecords.Record,
-    account: AccountMetadata,
+    account: AccountMetadata
   ) {
     this.postCid = record.cid;
     this.recordName = processAtUri(record.uri).rkey;
@@ -67,8 +67,8 @@ class Post {
     this.videosLinkCid = null;
     switch (post.embed?.$type) {
       case "app.bsky.embed.images":
-        this.imagesCid = post.embed.images.map((imageRecord: any) =>
-          imageRecord.image.ref.$link
+        this.imagesCid = post.embed.images.map(
+          (imageRecord: any) => imageRecord.image.ref.$link
         );
         break;
       case "app.bsky.embed.video":
@@ -81,8 +81,8 @@ class Post {
         this.quotingUri = processAtUri(post.embed.record.record.uri);
         switch (post.embed.media.$type) {
           case "app.bsky.embed.images":
-            this.imagesCid = post.embed.media.images.map((imageRecord) =>
-              imageRecord.image.ref.$link
+            this.imagesCid = post.embed.media.images.map(
+              (imageRecord) => imageRecord.image.ref.$link
             );
 
             break;
@@ -111,36 +111,37 @@ const rpc = new XRPC({
   }),
 });
 
-const getDidsFromPDS = async () : Promise<At.Did[]> => {
+const getDidsFromPDS = async (): Promise<At.Did[]> => {
   const { data } = await rpc.get("com.atproto.sync.listRepos", {
     params: {},
   });
-  return data.repos.map((repo: any) => (repo.did)) as At.Did[];
+  return data.repos.map((repo: any) => repo.did) as At.Did[];
 };
-const getAccountMetadata = async (did: `did:${string}:${string}`) : Promise<AccountMetadata> => {
+const getAccountMetadata = async (
+  did: `did:${string}:${string}`
+): Promise<AccountMetadata> => {
   // gonna assume self exists in the app.bsky.actor.profile
   try {
-  const { data } = await rpc.get("com.atproto.repo.getRecord", {
-    params: {
-      repo: did,
-      collection: "app.bsky.actor.profile",
-      rkey: "self",
-    },
-  });
-  const value = data.value as AppBskyActorProfile.Record;
-  const handle = await blueskyHandleFromDid(did);
-  const account: AccountMetadata = {
-    did: did,
-    handle: handle,
-    displayName: value.displayName || "",
-    avatarCid: null,
-  };
-  if (value.avatar) {
-    account.avatarCid = value.avatar.ref["$link"];
-  }
-  return account;
-  }
-  catch (e) {
+    const { data } = await rpc.get("com.atproto.repo.getRecord", {
+      params: {
+        repo: did,
+        collection: "app.bsky.actor.profile",
+        rkey: "self",
+      },
+    });
+    const value = data.value as AppBskyActorProfile.Record;
+    const handle = await blueskyHandleFromDid(did);
+    const account: AccountMetadata = {
+      did: did,
+      handle: handle,
+      displayName: value.displayName || "",
+      avatarCid: null,
+    };
+    if (value.avatar) {
+      account.avatarCid = value.avatar.ref["$link"];
+    }
+    return account;
+  } catch (e) {
     console.error(`Error fetching metadata for ${did}:`, e);
     return {
       did: "error",
@@ -151,14 +152,14 @@ const getAccountMetadata = async (did: `did:${string}:${string}`) : Promise<Acco
   }
 };
 
-const getAllMetadataFromPds = async () : Promise<AccountMetadata[]> => {
+const getAllMetadataFromPds = async (): Promise<AccountMetadata[]> => {
   const dids = await getDidsFromPDS();
   const metadata = await Promise.all(
     dids.map(async (repo: `did:${string}:${string}`) => {
       return await getAccountMetadata(repo);
-    }),
+    })
   );
-  return metadata.filter(account => account.did !== "error");
+  return metadata.filter((account) => account.did !== "error");
 };
 
 const fetchPosts = async (did: string) => {
@@ -173,14 +174,14 @@ const fetchPosts = async (did: string) => {
     return {
       records: data.records as ComAtprotoRepoListRecords.Record[],
       did: did,
-      error: false
+      error: false,
     };
   } catch (e) {
     console.error(`Error fetching posts for ${did}:`, e);
     return {
       records: [],
       did: did,
-      error: true
+      error: true,
     };
   }
 };
@@ -195,7 +196,7 @@ const identityResolve = async (did: At.Did) => {
 
   if (did.startsWith("did:plc:") || did.startsWith("did:web:")) {
     const doc = await resolver.resolve(
-      did as `did:plc:${string}` | `did:web:${string}`,
+      did as `did:plc:${string}` | `did:web:${string}`
     );
     return doc;
   } else {
@@ -221,15 +222,15 @@ const blueskyHandleFromDid = async (did: At.Did) => {
 const fetchAllPosts = async () => {
   const users: AccountMetadata[] = await getAllMetadataFromPds();
   const postRecords = await Promise.all(
-    users.map(async (metadata: AccountMetadata) =>
-      await fetchPosts(metadata.did)
-    ),
+    users.map(
+      async (metadata: AccountMetadata) => await fetchPosts(metadata.did)
+    )
   );
-  const validPostRecords = postRecords.filter(record => !record.error);
+  const validPostRecords = postRecords.filter((record) => !record.error);
   const posts: Post[] = validPostRecords.flatMap((userFetch) =>
     userFetch.records.map((record) => {
-      const user = users.find((user: AccountMetadata) =>
-        user.did == userFetch.did
+      const user = users.find(
+        (user: AccountMetadata) => user.did == userFetch.did
       );
       if (!user) {
         throw new Error(`User with DID ${userFetch.did} not found`);
@@ -237,7 +238,16 @@ const fetchAllPosts = async () => {
       return new Post(record, user);
     })
   );
+
   posts.sort((a, b) => b.timestamp - a.timestamp);
+  
+  if(!Config.SHOW_FUTURE_POSTS) {
+    // Filter out posts that are in the future
+    const now = Date.now();
+    const filteredPosts = posts.filter((post) => post.timestamp <= now);
+    return filteredPosts.slice(0, Config.MAX_POSTS);
+  }
+
   return posts.slice(0, Config.MAX_POSTS);
 };
 export { fetchAllPosts, getAllMetadataFromPds, Post };
