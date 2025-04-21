@@ -1,9 +1,9 @@
 <script lang="ts">
   import PostComponent from "./lib/PostComponent.svelte";
   import AccountComponent from "./lib/AccountComponent.svelte";
-  import { fetchAllPosts, Post, getAllMetadataFromPds } from "./lib/pdsfetch";
+  import { getNextPosts, Post, getAllMetadataFromPds } from "./lib/pdsfetch";
   import { Config } from "../config";
-  const postsPromise = fetchAllPosts();
+  const postsPromise = getNextPosts();
   const accountsPromise = getAllMetadataFromPds();
 </script>
 
@@ -12,6 +12,7 @@
     {#await accountsPromise}
       <p>Loading...</p>
     {:then accountsData}
+      
       <div id="Account">
         <h1 id="Header">ATProto PDS</h1>
         <p>Home to {accountsData.length} accounts</p>
@@ -29,6 +30,9 @@
     {#await postsPromise}
       <p>Loading...</p>
     {:then postsData}
+      <button on:click={getNextPosts}>
+        Load more posts
+      </button>
       <div id="Feed">
         <div id="spacer"></div>
         {#each postsData as postObject}
