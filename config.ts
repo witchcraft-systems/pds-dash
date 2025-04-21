@@ -18,7 +18,7 @@ export class Config {
    * Maximum number of posts to show in the feed (across all users)
    * @default 100
    */
-  static readonly MAX_POSTS: number = 150;
+  static readonly MAX_POSTS: number = 100;
 
   /**
    * Footer text for the dashboard
