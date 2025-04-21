@@ -2,6 +2,7 @@
   import { Post } from "./pdsfetch";
   import { Config } from "../../config";
   import { onMount } from "svelte";
+  import moment from "moment";
 
   let { post }: { post: Post } = $props();
 
@@ -76,7 +77,9 @@
         <a
           id="postLink"
           href="{Config.FRONTEND_URL}/profile/{post.authorDid}/post/{post.recordName}"
-          >{post.timenotstamp}</a
+          >{moment(post.timenotstamp).isBefore(moment().subtract(1, "month"))
+            ? moment(post.timenotstamp).format("MMM D, YYYY")
+            : moment(post.timenotstamp).fromNow()}</a
         >
       </p>
     </div>
@@ -131,6 +134,7 @@
       </div>
     {/if}
     {#if post.videosLinkCid}
+      <!-- svelte-ignore a11y_media_has_caption -->
       <video
         id="embedVideo"
         src="{Config.PDS_URL}/xrpc/com.atproto.sync.getBlob?did={post.authorDid}&cid={post.videosLinkCid}"
@@ -141,14 +145,15 @@
 </div>
 
 <style>
+
   a:hover {
     text-decoration: underline;
   }
   #postContainer {
     display: flex;
     flex-direction: column;
-    border: 1px solid #8054f0;
-    background-color: black;
+    border: 1px solid var(--border-color);
+    background-color: var(--background-color);
     margin-bottom: 15px;
     overflow-wrap: break-word;
   }
@@ -157,29 +162,29 @@
     flex-direction: row;
     align-items: center;
     justify-content: start;
-    background-color: #1f1145;
+    background-color: var(--header-background-color);
     padding: 0px 0px;
     height: fit-content;
-    border-bottom: 1px solid #8054f0;
+    border-bottom: 1px solid var(--border-color);
     font-weight: bold;
     overflow-wrap: break-word;
     height: 60px;
   }
   #displayName {
-    color: white;
+    color: var(--text-color);
     font-size: 1.2em;
     padding: 0;
     margin: 0;
   }
   #handle {
-    color: #8054f0;
+    color: var(--border-color);
     font-size: 0.8em;
     padding: 0;
     margin: 0;
   }
 
   #postLink {
-    color: #8054f0;
+    color: var(--border-color);
     font-size: 0.8em;
     padding: 0;
     margin: 0;
@@ -189,8 +194,8 @@
     text-align: start;
     flex-direction: column;
     padding: 10px;
-    background-color: #0d0620;
-    color: white;
+    background-color: var(--content-background-color);
+    color: var(--text-color);
     overflow-wrap: break-word;
   }
   #replyingText {
@@ -220,7 +225,7 @@
     height: 100%;
     margin: 0px;
     margin-left: 0px;
-    border-right: #8054f0 1px solid;
+    border-right: var(--border-color) 1px solid;
   }
   #carouselContainer {
     position: relative;
@@ -245,16 +250,16 @@
   .indicator {
     width: 8px;
     height: 8px;
-    background-color: #4a4a4a;
+    background-color: var(--indicator-inactive-color);
   }
   .indicator.active {
-    background-color: #8054f0;
+    background-color: var(--indicator-active-color);
   }
   #prevBtn,
   #nextBtn {
     background-color: rgba(31, 17, 69, 0.7);
-    color: white;
-    border: 1px solid #8054f0;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
     width: 30px;
     height: 30px;
     cursor: pointer;

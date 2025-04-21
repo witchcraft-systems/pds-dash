@@ -41,8 +41,9 @@
 </main>
 
 <style>
+
   /* desktop style */
- 
+
   #Content {
     display: flex;
     /* split the screen in half, left for accounts, right for posts */
@@ -51,8 +52,8 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    background-color: #12082b;
-    color: #ffffff;
+    background-color: var(--background-color);
+    color: var(--text-color);
   }
   #Feed {
     width: 65%;
@@ -74,8 +75,8 @@
     width: 35%;
     display: flex;
     flex-direction: column; 
-    border: 1px solid #8054f0;
-    background-color: #0d0620;
+    border: 1px solid var(--border-color);
+    background-color: var(--content-background-color);
     height: 80vh;
     padding: 20px;
     margin-left: 20px;
@@ -96,8 +97,8 @@
     margin-bottom: 20px;
   }
 
-    /* mobile style */
-    @media screen and (max-width: 600px) {
+  /* mobile style */
+  @media screen and (max-width: 600px) {
     #Content {
       flex-direction: column;
       width: auto;

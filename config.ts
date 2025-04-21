@@ -15,10 +15,10 @@ export class Config {
     static readonly FRONTEND_URL: string = "https://deer.social";
 
     /**
-     * Maximum number of posts to fetch from the PDS per user
-     * @default 10
+     * Maximum number of posts to show in the feed (across all users)
+     * @default 100
      */
-    static readonly MAX_POSTS_PER_USER: number = 22;
+    static readonly MAX_POSTS: number = 100;
 
     /**
      * Footer text for the dashboard
