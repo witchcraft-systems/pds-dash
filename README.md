@@ -6,7 +6,7 @@ a frontend dashboard with stats for your ATProto PDS.
 
 ### prerequisites
 
-- [Deno](https://deno.com/manual/getting_started/installation)
+- [deno](https://deno.com/manual/getting_started/installation)
 
 ### installing
 
@@ -55,6 +55,6 @@ relevant files:
 
 the favicon is located at [`public/favicon.ico`](public/favicon.ico)
 
-## License
+## license
 
 MIT
