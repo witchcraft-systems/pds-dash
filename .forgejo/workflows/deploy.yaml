@@ -29,22 +29,30 @@ jobs:
       - name: Build project
         run: deno task build
 
-      - name: Setup SCP
+      - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
-          chmod -R go-rwx ~/.ssh
+          chmod 600 ~/.ssh/id_ed25519
+          cat > ~/.ssh/config << EOF
+          Host deploy
+            HostName ${{ vars.SERVER_HOST }}
+            User ${{ vars.SERVER_USER }}
+            IdentityFile ~/.ssh/id_ed25519
+            StrictHostKeyChecking accept-new
+            BatchMode yes
+            PasswordAuthentication no
+            PubkeyAuthentication yes
+          EOF
+          chmod 600 ~/.ssh/config
           ssh-keyscan -H ${{ vars.SERVER_HOST }} >> ~/.ssh/known_hosts
-          echo "Deploying to ${{ vars.SERVER_HOST }} as ${{ vars.SERVER_USER }} to /home/common/www/${{ github.ref_name }}"
+          echo "Deploying to ${{ vars.SERVER_HOST }} as ${{ vars.SERVER_USER }} to /var/www/pds/${{ github.ref_name }}"
 
       - name: Debug SSH Connection
-        run: ssh -v -o PasswordAuthentication=no -i ~/.ssh/id_ed25519 ${{ vars.SERVER_USER }}@${{ vars.SERVER_HOST }} echo "SSH Connection Successful"
+        run: ssh -v deploy echo "SSH Connection Successful"
 
-      - name: create folder if not exists
-        run: |
-          ssh -i ~/.ssh/id_ed25519 ${{ vars.SERVER_USER }}@${{ vars.SERVER_HOST }} "mkdir -p /var/www/pds/${{ github.ref_name }}"
+      - name: Create folder if not exists
+        run: ssh deploy "mkdir -p /var/www/pds/${{ github.ref_name }}"
 
       - name: Deploy via SCP
-        run: |
-          scp -i ~/.ssh/id_ed25519 -rv ./dist/* ${{ vars.SERVER_USER }}@\[${{ vars.SERVER_HOST }}\]:/var/www/pds/${{ github.ref_name }}
- 
+        run: scp -r ./dist/* deploy:/var/www/pds/${{ github.ref_name }}
