@@ -167,7 +167,7 @@ const fetchPosts = async (did: string) => {
       params: {
         repo: did as At.Identifier,
         collection: "app.bsky.feed.post",
-        limit: Config.MAX_POSTS_PER_USER,
+        limit: Config.MAX_POSTS,
       },
     });
     return {
@@ -238,7 +238,7 @@ const fetchAllPosts = async () => {
     })
   );
   posts.sort((a, b) => b.timestamp - a.timestamp);
-  return posts;
+  return posts.slice(0, Config.MAX_POSTS);
 };
 export { fetchAllPosts, getAllMetadataFromPds, Post };
 export type { AccountMetadata };
