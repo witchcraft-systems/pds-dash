@@ -161,31 +161,6 @@ const getAllMetadataFromPds = async (): Promise<AccountMetadata[]> => {
   return metadata.filter((account) => account !== null) as AccountMetadata[];
 };
 
-// OLD
-const fetchPosts = async (did: string) => {
-  try {
-    const { data } = await rpc.get("com.atproto.repo.listRecords", {
-      params: {
-        repo: did as At.Identifier,
-        collection: "app.bsky.feed.post",
-        limit: Config.MAX_POSTS,
-      },
-    });
-    return {
-      records: data.records as ComAtprotoRepoListRecords.Record[],
-      did: did,
-      error: false,
-    };
-  } catch (e) {
-    console.error(`Error fetching posts for ${did}:`, e);
-    return {
-      records: [],
-      did: did,
-      error: true,
-    };
-  }
-};
-
 const identityResolve = async (did: At.Did) => {
   const resolver = new CompositeDidDocumentResolver({
     methods: {
@@ -364,38 +339,5 @@ const fetchPostsForUser = async (did: At.Did, cursor: string | null) => {
   }
 };
 
-// const fetchAllPosts = async () => {
-//   const users: AccountMetadata[] = await getAllMetadataFromPds();
-//   const postRecords = await Promise.all(
-//     users.map(
-//       async (metadata: AccountMetadata) => await fetchPosts(metadata.did),
-//     ),
-//   );
-//   // Filter out any records that have an error
-//   const validPostRecords = postRecords.filter((record) => !record.error);
-
-//   const posts: Post[] = validPostRecords.flatMap((userFetch) =>
-//     userFetch.records.map((record) => {
-//       const user = users.find(
-//         (user: AccountMetadata) => user.did == userFetch.did,
-//       );
-//       if (!user) {
-//         throw new Error(`User with DID ${userFetch.did} not found`);
-//       }
-//       return new Post(record, user);
-//     })
-//   );
-
-//   posts.sort((a, b) => b.timestamp - a.timestamp);
-
-//   if (!Config.SHOW_FUTURE_POSTS) {
-//     // Filter out posts that are in the future
-//     const now = Date.now();
-//     const filteredPosts = posts.filter((post) => post.timestamp <= now);
-//     return filteredPosts.slice(0, Config.MAX_POSTS);
-//   }
-
-//   return posts.slice(0, Config.MAX_POSTS);
-// };
 export { getAllMetadataFromPds, getNextPosts, Post };
 export type { AccountMetadata };
