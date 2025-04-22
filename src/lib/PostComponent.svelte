@@ -113,7 +113,7 @@
           <div id="carouselControls">
             <button
               id="prevBtn"
-              on:click={prevImage}
+              onclick={prevImage}
               disabled={currentImageIndex === 0}>←</button
             >
             <div id="carouselIndicators">
@@ -125,7 +125,7 @@
             </div>
             <button
               id="nextBtn"
-              on:click={nextImage}
+              onclick={nextImage}
               disabled={currentImageIndex === post.imagesCid.length - 1}
               >→</button
             >

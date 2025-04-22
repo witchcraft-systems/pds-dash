@@ -16,7 +16,7 @@
     });
   });
   // Infinite loading function
-  const onInfinite = ({ detail: { loaded, complete } }) => {
+  const onInfinite = ({ detail: { loaded, complete } } : { detail : { loaded : () => void, complete : () => void}}) => {
     getNextPosts().then((newPosts) => {
       if (newPosts.length > 0) {
         posts = [...posts, ...newPosts];
@@ -53,11 +53,7 @@
         <PostComponent post={postObject as Post} />
       {/each}
       <InfiniteLoading on:infinite={onInfinite} 
-        id="infiniteLoading"
         distance={0}
-        threshold={0}
-        useWindow={false}
-        forceUseWindow={false}
       />
       <div id="spacer"></div>
     </div>

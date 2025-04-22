@@ -215,7 +215,6 @@ const getCutoffDate = (postAccounts: PostsAcc[]) => {
     }
   });
   if (cutoffDate) {
-    console.log("Cutoff date:", cutoffDate);
     return cutoffDate;
   } else {
     return new Date(now);
@@ -303,7 +302,6 @@ const getNextPosts = async () => {
       return postDate <= now;
     });
   }
-  // append the new posts to the existing posts
 
   const newPosts = records.map((record) => {
     const account = accountsMetadata.find(
@@ -316,14 +314,11 @@ const getNextPosts = async () => {
     }
     return new Post(record, account);
   });
-  console.log("Fetched posts:", newPosts);
-  console.log("Metadata:", accountsMetadata);
   return newPosts;
 };
 
 const fetchPostsForUser = async (did: At.Did, cursor: string | null) => {
   try {
-    console.log("Fetching posts for user:", did, "with Cursor: ", cursor);
     const { data } = await rpc.get("com.atproto.repo.listRecords", {
       params: {
         repo: did as At.Identifier,
