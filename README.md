@@ -44,7 +44,9 @@ we use our own CI/CD workflow at [`.forgejo/workflows/deploy.yaml`](.forgejo/wor
 
 ## theming
 
-currently the only way to theme the app is to edit css in the components directly, glhf
+the colors are designated in [`src/app.css`](src/app.css) as variables, go crazy with them
+
+the rest is done by editing the css files and style tags directly, good luck
 
 relevant files:
 
