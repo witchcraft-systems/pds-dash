@@ -9,14 +9,17 @@ export class Config {
   static readonly PDS_URL: string = "https://pds.witchcraft.systems";
 
   /**
-   * The base URL of the frontend service for linking to replies
+   * The base URL of the frontend service for linking to replies/quotes/accounts etc.
    * @default "https://deer.social"
    */
   static readonly FRONTEND_URL: string = "https://deer.social";
 
   /**
-   * Maximum number of posts to show in the feed (across all users)
-   * @default 100
+   * Maximum number of posts to fetch from the PDS per request
+   * Should be around 20 for about 10 users on the pds
+   * The more users you have, the lower the number should be
+   * since sorting is slow and is done on the frontend
+   * @default 20
    */
   static readonly MAX_POSTS: number = 20;
 
@@ -27,9 +30,9 @@ export class Config {
   static readonly FOOTER_TEXT: string =
     "Astrally projected from <a href='https://witchcraft.systems' target='_blank'>witchcraft.systems</a>";
 
-    /**
-     * Whether to show the posts that are in the future
-     * @default false
-     */
-    static readonly SHOW_FUTURE_POSTS: boolean = false;
+  /**
+   * Whether to show the posts that are in the future
+   * @default false
+   */
+  static readonly SHOW_FUTURE_POSTS: boolean = false;
 }

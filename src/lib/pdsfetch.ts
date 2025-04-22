@@ -240,6 +240,7 @@ const filterPostsByDate = (posts: PostsAcc[], cutoffDate: Date) => {
   });
   return filteredPosts;
 };
+// nightmare function. However it works so I am not touching it
 const getNextPosts = async () => {
   if (!accountsMetadata.length) {
     accountsMetadata = await getAllMetadataFromPds();
