@@ -26,9 +26,7 @@ interface AccountMetadata {
 }
 
 let accountsMetadata: AccountMetadata[] = [];
-// a chronologically sorted list of posts for all users, that will be shown by svelte
-// getNextPosts will populate this list with additional posts as needed
-let posts: Post[] = [];
+
 interface atUriObject {
   repo: string;
   collection: string;
@@ -259,7 +257,7 @@ const filterPostsByDate = (posts: PostsAcc[], cutoffDate: Date) => {
       return postDate >= cutoffDate;
     });
     if (filtered.length > 0) {
-      postAcc.account.currentCursor = filtered[filtered.length - 1].cid;
+      postAcc.account.currentCursor = processAtUri(filtered[filtered.length - 1].uri).rkey;
     }
     return {
       posts: filtered,
@@ -298,7 +296,16 @@ const getNextPosts = async () => {
   const cutoffDate = getCutoffDate(recordsFiltered);
   const recordsCutoff = filterPostsByDate(recordsFiltered, cutoffDate);
   // update the accountMetadata with the new cursor
-  accountsMetadata = recordsCutoff.map((postAcc) => postAcc.account);
+  accountsMetadata = accountsMetadata.map((account) => {
+    const postAcc = recordsCutoff.find(
+      (postAcc) => postAcc.account.did == account.did,
+    );
+    if (postAcc) {
+      account.currentCursor = postAcc.account.currentCursor;
+    }
+    return account;
+  }
+  );
   // throw the records in a big single array
   let records = recordsCutoff.flatMap((postAcc) => postAcc.posts);
   // sort the records by timestamp
@@ -310,8 +317,7 @@ const getNextPosts = async () => {
       (b.value as AppBskyFeedPost.Record).createdAt,
     ).getTime();
     return bDate - aDate;
-  }
-  );
+  });
   // filter out posts that are in the future
   if (!Config.SHOW_FUTURE_POSTS) {
     const now = Date.now();
@@ -323,23 +329,26 @@ const getNextPosts = async () => {
     });
   }
   // append the new posts to the existing posts
-  posts = posts.concat(
-    records.map((record) => {
-      const account = accountsMetadata.find(
-        (account) => account.did == processAtUri(record.uri).repo,
+
+  const newPosts = records.map((record) => {
+    const account = accountsMetadata.find(
+      (account) => account.did == processAtUri(record.uri).repo,
+    );
+    if (!account) {
+      throw new Error(
+        `Account with DID ${processAtUri(record.uri).repo} not found`,
       );
-      if (!account) {
-        throw new Error(`Account with DID ${processAtUri(record.uri).repo} not found`);
-      }
-      return new Post(record, account);
-    }),
-  );
-  console.log("Fetched posts:", posts);
-  return posts;
+    }
+    return new Post(record, account);
+  });
+  console.log("Fetched posts:", newPosts);
+  console.log("Metadata:", accountsMetadata);
+  return newPosts;
 };
 
 const fetchPostsForUser = async (did: At.Did, cursor: string | null) => {
   try {
+    console.log("Fetching posts for user:", did, "with Cursor: ", cursor);
     const { data } = await rpc.get("com.atproto.repo.listRecords", {
       params: {
         repo: did as At.Identifier,
@@ -388,5 +397,5 @@ const fetchPostsForUser = async (did: At.Did, cursor: string | null) => {
 
 //   return posts.slice(0, Config.MAX_POSTS);
 // };
-export { getAllMetadataFromPds, getNextPosts, Post, posts };
+export { getAllMetadataFromPds, getNextPosts, Post };
 export type { AccountMetadata };

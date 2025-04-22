@@ -1,10 +1,31 @@
 <script lang="ts">
   import PostComponent from "./lib/PostComponent.svelte";
   import AccountComponent from "./lib/AccountComponent.svelte";
+  import InfiniteLoading from "svelte-infinite-loading";
   import { getNextPosts, Post, getAllMetadataFromPds } from "./lib/pdsfetch";
   import { Config } from "../config";
-  const postsPromise = getNextPosts();
   const accountsPromise = getAllMetadataFromPds();
+  import { onMount } from "svelte";
+
+  let posts: Post[] = [];
+
+  onMount(() => {
+    // Fetch initial posts
+    getNextPosts().then((initialPosts) => {
+      posts = initialPosts;
+    });
+  });
+  // Infinite loading function
+  const onInfinite = ({ detail: { loaded, complete } }) => {
+    getNextPosts().then((newPosts) => {
+      if (newPosts.length > 0) {
+        posts = [...posts, ...newPosts];
+        loaded();
+      } else {
+        complete();
+      }
+    });
+  };
 </script>
 
 <main>
@@ -12,7 +33,6 @@
     {#await accountsPromise}
       <p>Loading...</p>
     {:then accountsData}
-      
       <div id="Account">
         <h1 id="Header">ATProto PDS</h1>
         <p>Home to {accountsData.length} accounts</p>
@@ -27,20 +47,20 @@
       <p>Error: {error.message}</p>
     {/await}
 
-    {#await postsPromise}
-      <p>Loading...</p>
-    {:then postsData}
-      <button on:click={getNextPosts}>
-        Load more posts
-      </button>
-      <div id="Feed">
-        <div id="spacer"></div>
-        {#each postsData as postObject}
-          <PostComponent post={postObject as Post} />
-        {/each}
-        <div id="spacer"></div>
-      </div>
-    {/await}
+    <div id="Feed">
+      <div id="spacer"></div>
+      {#each posts as postObject}
+        <PostComponent post={postObject as Post} />
+      {/each}
+      <InfiniteLoading on:infinite={onInfinite} 
+        id="infiniteLoading"
+        distance={0}
+        threshold={0}
+        useWindow={false}
+        forceUseWindow={false}
+      />
+      <div id="spacer"></div>
+    </div>
   </div>
 </main>
 

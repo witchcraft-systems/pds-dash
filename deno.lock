@@ -8,6 +8,7 @@
     "npm:@tsconfig/svelte@^5.0.4": "5.0.4",
     "npm:moment@^2.30.1": "2.30.1",
     "npm:svelte-check@^4.1.5": "4.1.6_svelte@5.28.1__acorn@8.14.1_typescript@5.7.3",
+    "npm:svelte-infinite-loading@^1.4.0": "1.4.0",
     "npm:svelte@^5.23.1": "5.28.1_acorn@8.14.1",
     "npm:typescript@~5.7.2": "5.7.3",
     "npm:vite@^6.3.1": "6.3.2_picomatch@4.0.2"
@@ -415,6 +416,9 @@
         "typescript"
       ]
     },
+    "svelte-infinite-loading@1.4.0": {
+      "integrity": "sha512-Jo+f/yr/HmZQuIiiKKzAHVFXdAUWHW2RBbrcQTil8JVk1sCm/riy7KTJVzjBgQvHasrFQYKF84zvtc9/Y4lFYg=="
+    },
     "svelte@5.28.1_acorn@8.14.1": {
       "integrity": "sha512-iOa9WmfNG95lSOSJdMhdjJ4Afok7IRAQYXpbnxhd5EINnXseG0GVa9j6WPght4eX78XfFez45Fi+uRglGKPV/Q==",
       "dependencies": [
@@ -476,6 +480,7 @@
         "npm:@tsconfig/svelte@^5.0.4",
         "npm:moment@^2.30.1",
         "npm:svelte-check@^4.1.5",
+        "npm:svelte-infinite-loading@^1.4.0",
         "npm:svelte@^5.23.1",
         "npm:typescript@~5.7.2",
         "npm:vite@^6.3.1"
