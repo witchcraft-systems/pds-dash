@@ -16,7 +16,11 @@
     });
   });
   // Infinite loading function
-  const onInfinite = ({ detail: { loaded, complete } } : { detail : { loaded : () => void, complete : () => void}}) => {
+  const onInfinite = ({
+    detail: { loaded, complete },
+  }: {
+    detail: { loaded: () => void; complete: () => void };
+  }) => {
     getNextPosts().then((newPosts) => {
       console.log("Loading next posts...");
       if (newPosts.length > 0) {
@@ -53,9 +57,7 @@
       {#each posts as postObject}
         <PostComponent post={postObject as Post} />
       {/each}
-      <InfiniteLoading on:infinite={onInfinite} 
-        distance={3000}
-      />
+      <InfiniteLoading on:infinite={onInfinite} distance={3000} />
       <div id="spacer"></div>
     </div>
   </div>

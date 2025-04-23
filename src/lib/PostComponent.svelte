@@ -213,6 +213,10 @@
   #postText {
     margin: 0;
     padding: 0;
+    overflow-wrap: break-word;
+    word-wrap: normal;
+    word-break: break-word;
+    hyphens: none;
   }
   #headerText {
     margin-left: 10px;
