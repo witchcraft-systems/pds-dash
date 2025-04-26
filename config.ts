@@ -24,11 +24,10 @@ export class Config {
   static readonly MAX_POSTS: number = 20;
 
   /**
-   * Footer text for the dashboard
-   * @default "Astrally projected from witchcraft.systems"
+   * Footer text for the dashboard, you probably want to change this
    */
   static readonly FOOTER_TEXT: string =
-    "Astrally projected from <a href='https://witchcraft.systems' target='_blank'>witchcraft.systems</a>";
+    "Astrally projected from <a href='https://witchcraft.systems' target='_blank'>witchcraft.systems</a><br><br><a href='https://git.witchcraft.systems/scientific-witchery/pds-dash' target='_blank'>Source</a> (<a href='https://github.com/witchcraft-systems/pds-dash/' target='_blank'>github mirror</a>)";
 
   /**
    * Whether to show the posts that are in the future
