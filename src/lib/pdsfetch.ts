@@ -46,6 +46,7 @@ class Post {
   replyingUri: atUriObject | null;
   imagesCid: string[] | null;
   videosLinkCid: string | null;
+  gifLink: string | null;
 
   constructor(
     record: ComAtprotoRepoListRecords.Record,
@@ -69,6 +70,7 @@ class Post {
     this.quotingUri = null;
     this.imagesCid = null;
     this.videosLinkCid = null;
+    this.gifLink = null;
     switch (post.embed?.$type) {
       case "app.bsky.embed.images":
         this.imagesCid = post.embed.images.map(
@@ -95,6 +97,9 @@ class Post {
 
             break;
         }
+        break;
+      case "app.bsky.embed.external": // assuming that external embeds are gifs for now
+        this.gifLink = post.embed.external.uri;
         break;
     }
   }

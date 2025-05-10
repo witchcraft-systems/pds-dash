@@ -141,6 +141,13 @@
         controls
       ></video>
     {/if}
+    {#if post.gifLink}
+      <img
+        id="embedVideo"
+        src="{post.gifLink}"
+        alt="Post GIF"
+      />
+    {/if}
   </div>
 </div>
 
