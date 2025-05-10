@@ -52,12 +52,12 @@
       <p>Error: {error.message}</p>
     {/await}
 
-    <div id="Feed">
+    <div id="Feed" property="infinite-wrapper">
       <div id="spacer"></div>
       {#each posts as postObject}
         <PostComponent post={postObject as Post} />
       {/each}
-      <InfiniteLoading on:infinite={onInfinite} distance={3000} />
+      <InfiniteLoading on:infinite={onInfinite} distance={3000} forceUseInfiniteWrapper=true />
       <div id="spacer"></div>
     </div>
   </div>
