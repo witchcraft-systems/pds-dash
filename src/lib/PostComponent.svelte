@@ -170,12 +170,21 @@
     height: 60px;
   }
   #displayName {
+    display: block;
     color: var(--text-color);
     font-size: 1.2em;
     padding: 0;
     margin: 0;
+    overflow-wrap:normal;
+    word-wrap: break-word;
+    word-break: break-word;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100%;
   }
   #handle {
+    display: block;
     color: var(--border-color);
     font-size: 0.8em;
     padding: 0;
