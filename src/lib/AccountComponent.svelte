@@ -32,6 +32,7 @@
   #accountName {
     margin-left: 10px;
     font-size: 0.9em;
+    max-width: 80%;
 
     /* replace overflow with ellipsis */
     overflow: hidden;
@@ -42,6 +43,7 @@
     width: 50px;
     height: 50px;
     margin: 0px;
+    object-fit: cover;
     border-right: var(--border-color) 1px solid;
   }
 </style>
