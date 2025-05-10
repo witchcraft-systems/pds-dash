@@ -52,12 +52,17 @@
       <p>Error: {error.message}</p>
     {/await}
 
-    <div id="Feed" property="infinite-wrapper">
+    <div id="Feed">
       <div id="spacer"></div>
       {#each posts as postObject}
         <PostComponent post={postObject as Post} />
       {/each}
-      <InfiniteLoading on:infinite={onInfinite} distance={3000} forceUseInfiniteWrapper=true />
+      {#if screen.availWidth > 600}
+        <InfiniteLoading on:infinite={onInfinite} distance={3000} forceUseInfiniteWrapper="#Feed" />
+      {/if}
+      {#if screen.availWidth <= 600}
+        <InfiniteLoading on:infinite={onInfinite} distance={3000} forceUseInfiniteWrapper=false />
+      {/if}
       <div id="spacer"></div>
     </div>
   </div>
@@ -138,6 +143,7 @@
       height: auto;
     }
     #Feed {
+      overflow-y: scroll;
       width: 95%;
       margin: 0px;
       margin-left: 10%;
