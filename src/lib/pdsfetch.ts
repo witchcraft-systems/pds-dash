@@ -13,6 +13,7 @@ import {
   WebDidDocumentResolver,
 } from "@atcute/identity-resolver";
 import { Config } from "../../config";
+import { Mutex } from "mutex-ts"
 // import { ComAtprotoRepoListRecords.Record } from "@atcute/client/lexicons";
 // import { AppBskyFeedPost } from "@atcute/client/lexicons";
 // import { AppBskyActorDefs } from "@atcute/client/lexicons";
@@ -247,8 +248,11 @@ const filterPostsByDate = (posts: PostsAcc[], cutoffDate: Date) => {
   });
   return filteredPosts;
 };
+
+const postsMutex = new Mutex();
 // nightmare function. However it works so I am not touching it
 const getNextPosts = async () => {
+  const release = await postsMutex.obtain();
   if (!accountsMetadata.length) {
     accountsMetadata = await getAllMetadataFromPds();
   }
@@ -322,6 +326,8 @@ const getNextPosts = async () => {
     }
     return new Post(record, account);
   });
+  // release the mutex
+  release();
   return newPosts;
 };
 

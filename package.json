@@ -14,6 +14,7 @@
     "@atcute/client": "^3.0.1",
     "@atcute/identity-resolver": "^0.1.2",
     "moment": "^2.30.1",
+    "mutex-ts": "^1.2.1",
     "svelte-infinite-loading": "^1.4.0"
   },
   "devDependencies": {
