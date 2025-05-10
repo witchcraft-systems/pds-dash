@@ -37,7 +37,6 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    max-width: 80%;
   }
   #avatar {
     width: 50px;

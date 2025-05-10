@@ -129,7 +129,7 @@
       margin-top: 5%;
     }
     #Account {
-      width: auto;
+      width: 85%;
       padding-left: 5%;
       padding-right: 5%;
       margin-bottom: 20px;
