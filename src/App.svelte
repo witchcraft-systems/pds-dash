@@ -57,12 +57,7 @@
       {#each posts as postObject}
         <PostComponent post={postObject as Post} />
       {/each}
-      {#if screen.availWidth > 600}
-        <InfiniteLoading on:infinite={onInfinite} distance={3000} forceUseInfiniteWrapper="#Feed" />
-      {/if}
-      {#if screen.availWidth <= 600}
-        <InfiniteLoading on:infinite={onInfinite} distance={3000} forceUseInfiniteWrapper=false />
-      {/if}
+        <InfiniteLoading on:infinite={onInfinite} distance={3000} />
       <div id="spacer"></div>
     </div>
   </div>
@@ -83,9 +78,9 @@
     color: var(--text-color);
   }
   #Feed {
+    overflow-y: scroll;
     width: 65%;
     height: 100vh;
-    overflow-y: scroll;
     padding: 20px;
     padding-bottom: 0;
     padding-top: 0;
@@ -143,13 +138,12 @@
       height: auto;
     }
     #Feed {
-      overflow-y: scroll;
       width: 95%;
       margin: 0px;
       margin-left: 10%;
       margin-right: 10%;
       padding: 0px;
-      height: auto;
+      overflow-y: visible;
     }
 
     #spacer {
