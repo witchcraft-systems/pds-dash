@@ -222,13 +222,21 @@
     margin-left: 10px;
     font-size: 0.9em;
     text-align: start;
-    overflow-wrap: break-word;
+    word-break: break-word;
+    max-width: 80%;
+    max-height: 95%;
     overflow: hidden;
+    align-self: flex-start;
+    margin-top: auto;
+    margin-bottom: auto;
   }
   #avatar {
-    height: 100%;
+    height: 60px;
+    width: 60px;
     margin: 0px;
     margin-left: 0px;
+    overflow: hidden;
+    object-fit: cover;
     border-right: var(--border-color) 1px solid;
   }
   #carouselContainer {

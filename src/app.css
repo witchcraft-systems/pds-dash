@@ -66,6 +66,10 @@ body {
   font-size: 24px;
   color: var(--text-color);
   border-color: var(--border-color);
+  overflow-wrap: break-word;
+  word-wrap: normal;
+  word-break: break-word;
+  hyphens: none;
 }
 
 h1 {
@@ -75,6 +79,7 @@ h1 {
 
 #app {
   max-width: 1400px;
+  width: 100%;
   margin: 0;
   padding: 0;
   margin-left: auto;
