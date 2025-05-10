@@ -99,7 +99,9 @@ class Post {
         }
         break;
       case "app.bsky.embed.external": // assuming that external embeds are gifs for now
-        this.gifLink = post.embed.external.uri;
+        if (post.embed.external.uri.includes(".gif")) {
+          this.gifLink = post.embed.external.uri;
+        }
         break;
     }
   }
