@@ -12,10 +12,14 @@
         alt="avatar of {account.displayName}"
         src="{Config.PDS_URL}/xrpc/com.atproto.sync.getBlob?did={account.did}&cid={account.avatarCid}"
       />
+      <div id="accountName">
+        {account.displayName || account.handle || account.did}
+      </div>
+    {:else}
+      <div id="accountName" class="no-avatar">
+        {account.displayName || account.handle || account.did}
+      </div>
     {/if}
-    <div id="accountName">
-      {account.displayName || account.handle || account.did}
-    </div>
   </div>
 </a>
 
@@ -28,6 +32,7 @@
     padding: 0px;
     margin-bottom: 15px;
     border: 1px solid var(--border-color);
+    min-height: 50px;
   }
   #accountName {
     margin-left: 10px;
@@ -38,6 +43,9 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+  .no-avatar {
+    margin-left: 60px !important;
   }
   #avatar {
     width: 50px;
