@@ -1,3 +1,4 @@
+@import url('./themes/colors.css');
 body {
   background-color: red;
 }
