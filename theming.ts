@@ -9,6 +9,7 @@ export const themePlugin = (): Plugin => {
     console.log(`Using theme folder: ${themeFolder}`);
     return {
         name: 'theme-generator',
+        enforce: 'pre', // Ensure this plugin runs first
         transform(code, id) {
             if (id.endsWith('app.css')) {
                 const colorsCode = Deno.readTextFileSync(Deno.cwd() + '/themes/colors.css');
