@@ -1,8 +1,9 @@
 import { Plugin } from 'vite';
 import { Config } from './config';
+
+
 // Replaces app.css with the contents of the file specified in the
 // config file.
-
 export const themePlugin = (): Plugin => {
     const themeFile = Config.THEME;
     console.log(`Using theme file: ${themeFile}`);

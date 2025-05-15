@@ -20,30 +20,5 @@
 </a>
 
 <style>
-  #accountContainer {
-    display: flex;
-    text-align: start;
-    align-items: center;
-    background-color: var(--background-color);
-    padding: 0px;
-    margin-bottom: 15px;
-    border: 1px solid var(--border-color);
-  }
-  #accountName {
-    margin-left: 10px;
-    font-size: 0.9em;
-    max-width: 80%;
 
-    /* replace overflow with ellipsis */
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  #avatar {
-    width: 50px;
-    height: 50px;
-    margin: 0px;
-    object-fit: cover;
-    border-right: var(--border-color) 1px solid;
-  }
 </style>
