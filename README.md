@@ -10,7 +10,9 @@ a frontend dashboard with stats for your ATProto PDS.
 
 ### installing
 
-clone the repo, install dependencies using deno:
+clone the repo, copy `config.ts.example` to `config.ts` and edit it to your liking.
+
+then, install dependencies using deno:
 
 ```sh
 deno install
