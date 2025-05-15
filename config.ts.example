@@ -9,10 +9,10 @@ export class Config {
   static readonly PDS_URL: string = "";
 
   /**
-   * Theme css file to be used
-   * @default "theme.css"
+   * Theme to be used
+   * @default "default"
    */
-  static readonly THEME: string = "themes/theme.css";
+  static readonly THEME: string = "default";
 
   /**
    * The base URL of the frontend service for linking to replies/quotes/accounts etc.

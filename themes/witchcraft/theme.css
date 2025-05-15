@@ -238,20 +238,13 @@ a:hover {
 }
 #accountName {
   margin-left: 10px;
-  font-size: 0.9em;
+  font-size: 1em;
   max-width: 80%;
 
   /* replace overflow with ellipsis */
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-#avatar {
-  width: 50px;
-  height: 50px;
-  margin: 0px;
-  object-fit: cover;
-  border-right: var(--border-color) 1px solid;
 }
 
 /* App.Svelte */

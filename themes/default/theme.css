@@ -1,20 +1,20 @@
-/* Generic Default Theme for pds-dash */
+/* Modern Theme for pds-dash */
 
 :root {
-  /* Color overrides, edit to whatever you want */
-  --link-color: #3b82f6;
-  --link-hover-color: #2563eb;
+  /* Modern color palette */
+  --link-color: #4f46e5;
+  --link-hover-color: #4338ca;
   --time-color: #8b5cf6;
-  --background-color: #f9fafb;
+  --background-color: #f8fafc;
   --header-background-color: #ffffff;
   --content-background-color: #ffffff;
-  --text-color: #1f2937;
-  --border-color: #e5e7eb;
-  --indicator-inactive-color: #d1d5db;
+  --text-color: #111827;
+  --text-secondary-color: #4b5563;
+  --border-color: #e2e8f0;
+  --indicator-inactive-color: #cbd5e1;
   --indicator-active-color: #6366f1;
-  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --hover-bg: #f3f4f6;
-  --button-bg: #f9fafb;
+  
+  /* Modern shadows */
   --button-hover: #f3f4f6;
 }
 
