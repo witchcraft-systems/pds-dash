@@ -132,10 +132,9 @@ const getDidsFromPDS = async (): Promise<At.Did[]> => {
 const getAccountMetadata = async (
   did: `did:${string}:${string}`,
 ) => {
-  // gonna assume self exists in the app.bsky.actor.profile
   const account: AccountMetadata = {
     did: did,
-    handle: "",
+    handle: "", // Guaranteed to be filled out later
     displayName: "",
     avatarCid: null,
   };
