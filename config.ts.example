@@ -9,6 +9,12 @@ export class Config {
   static readonly PDS_URL: string = "";
 
   /**
+   * Theme css file to be used
+   * @default "theme.css"
+   */
+  static readonly THEME: string = "themes/theme.css";
+
+  /**
    * The base URL of the frontend service for linking to replies/quotes/accounts etc.
    * @default "https://deer.social" // or https://bsky.app if you're boring
    */
