@@ -4,11 +4,28 @@
   import InfiniteLoading from "svelte-infinite-loading";
   import { getNextPosts, Post, getAllMetadataFromPds } from "./lib/pdsfetch";
   import { Config } from "../config";
-  const accountsPromise = getAllMetadataFromPds();
   import { onMount } from "svelte";
+  import { CssVarsFromHue } from "./lib/colorgenerator";
+  
+  
+  const accountsPromise = getAllMetadataFromPds();
+  let colors = CssVarsFromHue(Config.HUE);
 
   let posts: Post[] = [];
 
+  const cycleColors = async () => {
+    let hue = Config.HUE;
+    while (true) {
+      colors = CssVarsFromHue(hue);
+      hue += 1;
+      if (hue > 360) {
+        hue = 0;
+      }
+      // Wait for 1 second before changing colors again
+      await new Promise((resolve) => setTimeout(resolve, 10));
+    }
+  }
+  cycleColors();
   onMount(() => {
     // Fetch initial posts
     getNextPosts().then((initialPosts) => {
@@ -33,7 +50,17 @@
   };
 </script>
 
-<main>
+<main style="
+  --background-color: {colors.background};
+  --header-background-color: {colors.header};
+  --content-background-color: {colors.content};
+  --text-color: {colors.text};
+  --border-color: {colors.accent};
+  --link-color: {colors.link};
+  --link-hover-color: {colors.linkHover};
+  --indicator-inactive-color: #4a4a4a;
+  --indicator-active-color: {colors.accent};
+">
   <div id="Content">
     {#await accountsPromise}
       <p>Loading...</p>
@@ -65,7 +92,6 @@
 
 <style>
   /* desktop style */
-
   #Content {
     display: flex;
     /* split the screen in half, left for accounts, right for posts */

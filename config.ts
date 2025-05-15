@@ -9,6 +9,12 @@ export class Config {
   static readonly PDS_URL: string = "https://pds.witchcraft.systems";
 
   /**
+   * Hue value for the color scheme
+   * @default 257
+   */
+  static readonly HUE: number = 13;
+
+  /**
    * The base URL of the frontend service for linking to replies/quotes/accounts etc.
    * @default "https://deer.social"
    */
