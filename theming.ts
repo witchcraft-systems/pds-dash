@@ -12,7 +12,6 @@ export const themePlugin = (): Plugin => {
         enforce: 'pre', // Ensure this plugin runs first
         transform(code, id) {
             if (id.endsWith('app.css')) {
-                const colorsCode = Deno.readTextFileSync(Deno.cwd() + '/themes/colors.css');
                 // Read the theme file and replace the contents of app.css with it
                 // Needs full path to the file
                 const themeCode = Deno.readTextFileSync(Deno.cwd() + '/themes/' + themeFolder + '/theme.css');
@@ -20,7 +19,7 @@ export const themePlugin = (): Plugin => {
 
                 // and add a comment at the top
                 const themeComment = `/* Generated from ${themeFolder} */\n`;
-                const themeCodeWithComment = themeComment + colorsCode + themeCode;
+                const themeCodeWithComment = themeComment + themeCode;
                 // Return the theme code as the new contents of app.css
                 return {
                     code: themeCodeWithComment,

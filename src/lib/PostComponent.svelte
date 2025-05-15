@@ -71,7 +71,7 @@
       >
       <p id="handle">
         <a href="{Config.FRONTEND_URL}/profile/{post.authorHandle}"
-          >{post.authorHandle}</a
+          >@{post.authorHandle}</a
         >
 
         <a

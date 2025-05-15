@@ -3,6 +3,22 @@
   src: url(https://witchcraft.systems/ProggyCleanNerdFont-Regular.ttf);
 }
 
+:root {
+  /* Color overrides, edit to whatever you want */
+  --primary-h: 260; /* Hue */
+  
+  --link-color: hsl(calc(var(--primary-h) - 30), 75%, 60%);
+  --link-hover-color: hsl(calc(var(--primary-h) - 30), 75%, 50%);
+  --background-color: hsl(var(--primary-h), 75%, 10%);
+  --header-background-color: hsl(var(--primary-h), 75%, 18%);
+  --content-background-color: hsl(var(--primary-h), 75%, 8%);
+  --text-color: #fff;
+  --border-color: hsl(var(--primary-h), 75%, 60%);
+  --indicator-inactive-color: #4a4a4a;
+  --indicator-active-color: var(--border-color);
+}
+
+
 a {
   font-weight: 500;
   color: var(--link-color);
