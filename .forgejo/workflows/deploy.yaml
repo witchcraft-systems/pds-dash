@@ -5,7 +5,7 @@ on:
     branches:
       - main
       - astra/ci
-      - astra/overrides
+
 
 jobs:
   deploy:
@@ -26,15 +26,6 @@ jobs:
       - name: Copy config file to root
         run: cp overrides/config.ts ./config.ts
       
-      - name: print file structure
-        run: |
-          echo "Current directory structure:"
-          ls -R
-
-      - name: fail (intentionally)
-        run: |
-          echo "This is an intentional failure to test the workflow."
-          exit 1
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
