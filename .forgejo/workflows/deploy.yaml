@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - astra/ci
+      - astra/overrides
 
 jobs:
   deploy:
@@ -12,9 +13,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout main repo
         uses: actions/checkout@v4
 
+      - name: Checkout config repo
+        uses: actions/checkout@v4
+        with:
+          repository: scientific-witchery/pds-dash-overrides
+          token: ${{ secrets.OVERRIDES_TOKEN }}
+
+      - name: print local filesystem
+        run: |
+          echo "Current directory: $(pwd)"
+          echo "Files in current directory:"
+          ls -la
+
+      - name: fail (intentionally)
+        run: |
+          echo "This is an intentional failure to test the workflow."
+          exit 1
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
