@@ -9,6 +9,26 @@
 
   let posts: Post[] = [];
 
+  let hue: number = 1;
+  const cycleColors = async () => {
+    while (true) {  
+      hue += 1;
+      if (hue > 360) {
+        hue = 0;
+      }
+      document.documentElement.style.setProperty("--primary-h", hue.toString());
+      await new Promise((resolve) => setTimeout(resolve, 10));
+    }
+  }
+  let clickCounter = 0;
+  const carameldansenfusion = async () => {
+    clickCounter++;
+    if (clickCounter >= 10) {
+      clickCounter = 0;
+      cycleColors();
+    }
+  };
+
   onMount(() => {
     // Fetch initial posts
     getNextPosts().then((initialPosts) => {
@@ -39,7 +59,7 @@
       <p>Loading...</p>
     {:then accountsData}
       <div id="Account">
-        <h1 id="Header">ATProto PDS</h1>
+        <h1 onclick={carameldansenfusion} id="Header">ATProto PDS</h1>
         <p>Home to {accountsData.length} accounts</p>
         <div id="accountsList">
           {#each accountsData as accountObject}
