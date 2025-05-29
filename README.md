@@ -46,16 +46,11 @@ we use our own CI/CD workflow at [`.forgejo/workflows/deploy.yaml`](.forgejo/wor
 
 ## theming
 
-the colors are designated in [`src/app.css`](src/app.css) as variables, go crazy with them
+themes are located in the `themes/` directory, you can create your own theme by copying one of the existing themes and modifying it to your liking.
 
-the rest is done by editing the css files and style tags directly, good luck
+currently, the name of the theme is determined by the directory name, and the theme itself is defined in `theme.css` inside that directory.
 
-relevant files:
-
-- [`src/App.svelte`](src/App.svelte)
-- [`src/app.css`](src/app.css)
-- [`src/lib/AccountComponent.svelte`](src/lib/AccountComponent.svelte)
-- [`src/lib/PostComponent.svelte`](src/lib/PostComponent.svelte)
+you can switch themes by changing the `theme` property in `config.ts`.
 
 the favicon is located at [`public/favicon.ico`](public/favicon.ico)
 
