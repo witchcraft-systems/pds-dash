@@ -6,15 +6,26 @@ on:
       - main
       - astra/ci
 
+
 jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout main repo
         uses: actions/checkout@v4
 
+      - name: Checkout overrides repo
+        uses: actions/checkout@v4
+        with:
+          repository: scientific-witchery/pds-dash-overrides
+          token: ${{ secrets.OVERRIDES_TOKEN}}
+          path: overrides
+
+      - name: Copy config file to root
+        run: cp overrides/config.ts ./config.ts
+      
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
