@@ -23,7 +23,7 @@ jobs:
           path: overrides
 
       - name: Copy config file to root
-          run: cp overrides/config.ts ./config.ts
+        run: cp overrides/config.ts ./config.ts
       
       - name: print file structure
         run: |
