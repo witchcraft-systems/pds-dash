@@ -2,7 +2,8 @@
 
 :root {
   /* Modern color palette */
-  --link-color: #4f46e5;
+  --primary-h: 243;
+  --link-color: hsl(var(--primary-h), 73%, 59%);
   --link-hover-color: #4338ca;
   --time-color: #8b5cf6;
   --background-color: #f8fafc;
@@ -342,7 +343,7 @@ h1 {
   font-size: 1.8em;
   margin-bottom: 16px;
   font-weight: 700;
-  background: linear-gradient(to right, #3b82f6, #8b5cf6);
+  background: linear-gradient(to right, var(--link-color), #8b5cf6);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
