@@ -132,7 +132,13 @@ const getDidsFromPDS = async (): Promise<At.Did[]> => {
 const getAccountMetadata = async (
   did: `did:${string}:${string}`,
 ) => {
-  // gonna assume self exists in the app.bsky.actor.profile
+  const account: AccountMetadata = {
+    did: did,
+    handle: "", // Guaranteed to be filled out later
+    displayName: "",
+    avatarCid: null,
+  };
+
   try {
     const { data } = await rpc.get("com.atproto.repo.getRecord", {
       params: {
@@ -142,21 +148,22 @@ const getAccountMetadata = async (
       },
     });
     const value = data.value as AppBskyActorProfile.Record;
-    const handle = await blueskyHandleFromDid(did);
-    const account: AccountMetadata = {
-      did: did,
-      handle: handle,
-      displayName: value.displayName || "",
-      avatarCid: null,
-    };
+    account.displayName = value.displayName || "";
     if (value.avatar) {
       account.avatarCid = value.avatar.ref["$link"];
     }
-    return account;
   } catch (e) {
-    console.error(`Error fetching metadata for ${did}:`, e);
+    console.warn(`Error fetching profile for ${did}:`, e);
+  }
+
+  try {
+    account.handle = await blueskyHandleFromDid(did);
+  } catch (e) {
+    console.error(`Error fetching handle for ${did}:`, e);
     return null;
   }
+
+  return account;
 };
 
 const getAllMetadataFromPds = async (): Promise<AccountMetadata[]> => {

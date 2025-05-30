@@ -12,10 +12,14 @@
         alt="avatar of {account.displayName}"
         src="{Config.PDS_URL}/xrpc/com.atproto.sync.getBlob?did={account.did}&cid={account.avatarCid}"
       />
+      <div id="accountName">
+        {account.displayName || account.handle || account.did}
+      </div>
+    {:else}
+      <div id="accountName" class="no-avatar">
+        {account.displayName || account.handle || account.did}
+      </div>
     {/if}
-    <div id="accountName">
-      {account.displayName || account.handle || account.did}
-    </div>
   </div>
 </a>
 
